@@ -1,8 +1,6 @@
-/*
- * File: main.c
- *    Browser application. UI.
- * 2020 - Created by Fred Nora.
- */
+// ui.c
+// User Interface for Gramado Browser.
+// 2020 - Created by Fred Nora.
 
 // rtl 
 #include <types.h>
@@ -34,7 +32,19 @@ extern int demo01main(
 
 extern int demo01_tests(int index);
 
-// The view port.
+
+// Window Info for main window.
+struct gws_window_info_d mwWindowInfo;
+
+
+// The main window
+// DEFAULT VALUES.
+unsigned long mw_left   = 4;
+unsigned long mw_top    = 4;
+unsigned long mw_width  = 40;
+unsigned long mw_height = 40;
+
+// The viewport.
 // DEFAULT VALUES.
 unsigned long cw_left   = 4;
 unsigned long cw_top    = 4;
@@ -270,7 +280,21 @@ browserProcedure(
         // #test
         // Initializing the 3D engine.
         //see: main function in demo01main.c in box/demo01/.
-        status = (int) demo01main(cw_left, cw_top, cw_width, cw_height);  
+        // Get info about the main window.
+        // IN: fd, wid, window info structure.
+        gws_get_window_info(
+            fd, 
+            __main_window,   // The app window.
+            (struct gws_window_info_d *) &mwWindowInfo );
+ 
+        status = 
+            (int) demo01main(
+                (mw_left + mwWindowInfo.cr_left + cw_left ), 
+                (mw_top  + mwWindowInfo.cr_top  + cw_top ), 
+                cw_width, 
+                cw_height );  
+        
+        
         if (status != 0){
             printf ("ui.c: demo01 initialization failed\n");
             exit(1);
@@ -459,12 +483,19 @@ int uiInitialize( int argc, char *argv[] )
                   COLOR_GRAY, COLOR_GRAY );
 */
 
+// Saving
+
+    mw_left   = (unsigned long) viewwindowx;
+    mw_top    = (unsigned long) viewwindowy;
+    mw_width  = (unsigned long) w_width;
+    mw_height = (unsigned long) w_height;
+
 // #test
     main_window = 
         (int) gws_create_application_window (
                 client_fd,
                 app_name,
-                viewwindowx, viewwindowy, w_width, w_height );
+                mw_left, mw_top, mw_width, mw_height );
 
     if (main_window < 0){
         debug_print("browser: main_window\n"); 
@@ -474,6 +505,7 @@ int uiInitialize( int argc, char *argv[] )
     if (main_window > 0){
         __main_window = main_window;
     }
+
 
 // ===================
 // address bar
@@ -586,6 +618,10 @@ int uiInitialize( int argc, char *argv[] )
 
 // Refresh
     gws_refresh_window( client_fd, main_window );
+
+
+// ============================================
+
 
 // ============================================
 // focus

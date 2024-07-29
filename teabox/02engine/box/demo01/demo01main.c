@@ -3528,12 +3528,11 @@ static int on_execute(void)
     WindowManager.wa_height =(WindowManager.root->height - WindowManager.taskbar->height);
 */
 
-
+// Again
     WindowManager.wa_left   = ViewportInfo.left;
     WindowManager.wa_top    = ViewportInfo.top;
     WindowManager.wa_width  = ViewportInfo.width;
     WindowManager.wa_height = ViewportInfo.height;
-
     WindowManager.initialized = TRUE;
 
     //#debug
@@ -3820,16 +3819,23 @@ int demo01main(
 
     int Status = -1;
 
-
 // Saving the viewport
-
-    ViewportInfo.left = viewport_left;
-    ViewportInfo.top  = viewport_top;
-    ViewportInfo.width = viewport_width;
-    ViewportInfo.height = viewport_height;
+    ViewportInfo.left   = (unsigned long) viewport_left;
+    ViewportInfo.top    = (unsigned long) viewport_top;
+    ViewportInfo.width  = (unsigned long) viewport_width;
+    ViewportInfo.height = (unsigned long) viewport_height;
     ViewportInfo.initialized = TRUE;
-
     printf ("demo01: ViewportInfo values gotten\n");
+
+
+    WindowManager.wa_left   = ViewportInfo.left;
+    WindowManager.wa_top    = ViewportInfo.top;
+    WindowManager.wa_width  = ViewportInfo.width;
+    WindowManager.wa_height = ViewportInfo.height;
+    // NOT initialized here.
+    // we will do this later.
+    //WindowManager.initialized = ?; 
+
 
 // #todo
 // Parse the parameters and select the flags.

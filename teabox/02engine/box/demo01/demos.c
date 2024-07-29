@@ -873,10 +873,17 @@ void demoCat(void)
 // Create a demo window
     struct gws_window_d *dw;
     dw = NULL;
-    dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
-    if( (void*) dw != NULL )
+    //dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
+    dw = 
+        (struct gws_window_d *) __create_demo_window(
+            ViewportInfo.left,
+            ViewportInfo.top,
+            ViewportInfo.width,
+            ViewportInfo.height );
+
+    if ((void*) dw != NULL)
     {
-       if(dw->magic==1234){
+       if(dw->magic == 1234){
            __demo_window = dw;
        }
     }
