@@ -35,10 +35,10 @@ extern int current_mode;
 #include "dtext.h"
 #include "line.h"
 
-#include "wt.h"
+#include "window/wt.h"
 #include "menu.h"
 #include "xxxinput.h"   //#test
-#include "window.h"
+#include "window/window.h"
 #include "bmp.h"
 
 // osdep/
@@ -75,8 +75,7 @@ extern int current_mode;
 
 #include "demos.h"
 
-#include "packet.h"
-
+#include "osdep/packet.h"
 
 // #osdep
 // #todo:
@@ -97,8 +96,7 @@ extern int current_mode;
 // drawing routines.
 // 'dc->something'
 // It needs to be the last one.
-#include "dc.h"
-
+#include "osdep/dc.h"
 
 struct gws_graphics_d
 {

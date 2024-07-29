@@ -1251,7 +1251,6 @@ void wm_Update_TaskBar( char *string, int flush );
 
 void wmInitializeGlobals(void);
 
-
 void yellowstatus0(char *string, int refresh);
 void yellow_status(char *string);
 
@@ -1446,7 +1445,9 @@ void *xxxCreateSurfaceWindow(
     unsigned long clientcolor, //11, Cor da área de cliente
     unsigned long color );      //12, Color (bg) (para janela simples).
 
-void create_taskbar (unsigned long tb_height);
+
+int create_taskbar(struct gws_window_d *parent_window);
+
 struct gws_window_d *wmCreateRootWindow(void);
 
 //worker: no checks

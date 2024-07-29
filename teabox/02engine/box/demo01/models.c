@@ -33,6 +33,12 @@ void __draw_cat(int eye_scale, int cat_x, int cat_y, int cat_z)
        }
     }
 
+    if ((void*)ow == NULL)
+    {
+        printf("__draw_cat: ow\n");
+        return;
+    }
+
 // model
     int model_x = (int) cat_x;
     int model_y = (int) cat_y;

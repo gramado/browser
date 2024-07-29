@@ -1432,11 +1432,9 @@ static int initGraphics(void)
 // Create and update the taskbar window.
 
     initBackground();
-// IN: height
-    //create_taskbar(100);
-    create_taskbar(40);  
-    wm_Update_TaskBar("WELCOME",TRUE);
 
+    //create_taskbar(root_window);  
+    //wm_Update_TaskBar("WELCOME",TRUE);
 
 //#debug
     //gws_show_backbuffer();
@@ -1989,7 +1987,7 @@ serviceAsyncCommand (void)
     case 4:
         gwssrv_debug_print ("serviceAsyncCommand: [4]\n");
         if (current_mode == GRAMADO_JAIL){
-            demoCat();
+            demoCat(TRUE);
         }
         goto done;
         break;
@@ -3513,12 +3511,15 @@ static int on_execute(void)
         printf("eng.bin: WindowManager.root fail\n");
         goto fail;
     }
+
 // No taskbar.
-    if ((void*) WindowManager.taskbar == NULL)
-    {
+// Its ok, now the demos are creating their own windows.
+    /*
+    if ((void*) WindowManager.taskbar == NULL){
         printf("eng.bin: WindowManager.taskbar fail\n");
         goto fail;
     }
+    */
 
 // The working area.
 
@@ -3643,7 +3644,7 @@ static int on_execute(void)
     display_server->initialized = TRUE;
 
 // Testing demos.
-    //demoCat();
+    //demoCat(TRUE);
     //demoCurve();
     //demoLines();
     //demoPolygon();
@@ -3768,9 +3769,8 @@ static inline void __outb(uint16_t port, uint8_t val)
 */
 
 
-
 // Testing demos.
-    //demoCat();
+    //demoCat(TRUW);
     //demoCurve();
     //demoLines();
     //demoPolygon();
@@ -3787,7 +3787,7 @@ int demo01_tests(int index)
         // Running in the viewport.
         // see: demos.c
         case 1:
-            demoCat();
+            demoCat(TRUE);
             break;
         
         // 3D
@@ -3795,8 +3795,11 @@ int demo01_tests(int index)
         // see: demos.c
         case 2:
             demoFlyingCubeSetup();
-            for  (i=0 ; i<100000; i++){
-                demoFlyingCube(FALSE,COLOR_BLACK);   
+            for  (i=0 ; i<100000; i++)
+            {
+                // IN: draw desktop, bg color
+                //demoFlyingCube(FALSE,COLOR_BLACK);
+                demoFlyingCube(TRUE,COLOR_BLACK);   
             }
             break;
         
@@ -3831,6 +3834,7 @@ int demo01main(
     printf ("demo01: ViewportInfo values gotten\n");
 
 
+    // It changes when we create the taskbar.
     WindowManager.wa_left   = ViewportInfo.left;
     WindowManager.wa_top    = ViewportInfo.top;
     WindowManager.wa_width  = ViewportInfo.width;

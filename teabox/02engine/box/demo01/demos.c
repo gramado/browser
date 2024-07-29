@@ -898,24 +898,24 @@ void demoLines(void)
     refresh_screen();
 }
 
-void demoCat(void)
+void demoCat(int draw_desktop)
 {
     register int i=0;
     int j=0;
     int count = 8;
     int scale_max = 100;
 
+    unsigned long dw_left = 0;  // Em relação à root que esta no viewport.
+    unsigned long dw_top = 0;   // Em relação à root que esta no viewport.
+    unsigned long dw_width = ViewportInfo.width;
+    unsigned long dw_height = ViewportInfo.height;
+
 // ---------------
 // Create a demo window
     struct gws_window_d *dw;
-    dw = NULL;
-    //dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
     dw = 
         (struct gws_window_d *) __create_demo_window(
-            ViewportInfo.left,
-            ViewportInfo.top,
-            ViewportInfo.width,
-            ViewportInfo.height );
+            dw_left, dw_top, dw_width, dw_height );
 
     if ((void*) dw != NULL)
     {
@@ -924,9 +924,14 @@ void demoCat(void)
        }
     }
 
+    //#debug
+    flush_window(dw);
+
     // Update hotspot position for the center of the window.
-    unsigned long hsx = (unsigned long) ( ViewportInfo.left + (ViewportInfo.width/2)  );
-    unsigned long hsy = (unsigned long) ( ViewportInfo.top  + (ViewportInfo.height/2) );
+    //unsigned long hsx = (unsigned long) ( ViewportInfo.left + (ViewportInfo.width/2)  );
+    //unsigned long hsy = (unsigned long) ( ViewportInfo.top  + (ViewportInfo.height/2) );
+    unsigned long hsx = (unsigned long) ( dw->absolute_x + (dw->width/2)  );
+    unsigned long hsy = (unsigned long) ( dw->absolute_y + (dw->height/2) );
     grprim_update_hotspot( hsx, hsy );
 
 //---------------------
@@ -954,7 +959,17 @@ void demoCat(void)
         for (i=0; i<scale_max; i++)
         {
             validate_background();                 //begin paint
+            // IN: Clipping window
             demoClearSurface(dw,GRCOLOR_LIGHTCYAN);   // Clear surface
+
+            // -------------------------
+            // Draw desktop?
+            // IN: ?
+            if (draw_desktop){
+                // #bugbug
+                //wm_update_desktop(TRUE,TRUE);
+            }
+
             // IN: eye scale, x,y,z
             __draw_cat(1,0,0,i);
             demoFlushSurface(dw);
@@ -967,10 +982,21 @@ void demoCat(void)
             //for (j=0; j<80; j++){ gwssrv_yield();}  // Delay
             
             //rtl_yield();
+
+            //while(1){}
         };
 
         count--;
     };
+
+// Create taskbar
+    /*
+    if ((void*)__demo_window != NULL)
+    {
+        create_taskbar(__demo_window);  
+        wm_Update_TaskBar("demoCat",TRUE);
+    }
+    */
 }
 
 
@@ -1395,17 +1421,17 @@ void demoFlyingCubeSetup(void)
 // Clear the buffer for the string in the yellow bar.
     memset(buf_fps,0,64);
 
+    unsigned long dw_left = 0;  // Em relação à root que esta no viewport.
+    unsigned long dw_top = 0;   // Em relação à root que esta no viewport.
+    unsigned long dw_width = ViewportInfo.width;
+    unsigned long dw_height = ViewportInfo.height;
+
 //--------------------------------
 // Create a demo window
     struct gws_window_d *dw;
-    dw = NULL;
-    //dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
     dw = 
         (struct gws_window_d *) __create_demo_window(
-            ViewportInfo.left,
-            ViewportInfo.top,
-            ViewportInfo.width,
-            ViewportInfo.height );
+            dw_left, dw_top, dw_width, dw_height );
 
     if ((void*) dw != NULL)
     {
@@ -1413,6 +1439,15 @@ void demoFlyingCubeSetup(void)
            __demo_window = dw;
        }
     }
+
+    //#debug
+    flush_window(dw);
+
+    // #todo: Test this
+    // Update hotspot position for the center of the window.
+    //unsigned long hsx = (unsigned long) ( dw->absolute_x + (dw->width/2)  );
+    //unsigned long hsy = (unsigned long) ( dw->absolute_y + (dw->height/2) );
+    //grprim_update_hotspot( hsx, hsy );
 
 // #test
 // Reinitializing projection, using the viewport values.
@@ -1629,8 +1664,10 @@ void demoFlyingCube(int draw_desktop, unsigned int bg_color)
 // Draw desktop?
 // IN: ?
     if (draw_desktop){
-        wm_update_desktop(TRUE,TRUE);
+        // #bugbug
+        //wm_update_desktop(TRUE,TRUE);
     }
+
 // -------------------------
 // Draw terrain.
 // No rotation. Small translation in positive z.
@@ -1703,7 +1740,6 @@ void demoFlyingCube(int draw_desktop, unsigned int bg_color)
     yellowstatus0(buf_fps,FALSE);
 
 // Flush the backbuffer into the framebuffer.
-    //gramado_flush_surface(NULL);
     gramado_flush_surface(__demo_window);
 }
 

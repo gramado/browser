@@ -20,7 +20,7 @@ void demoPolygon2(void);
 // curve+string
 void demoCurve(void);
 // Cat
-void demoCat(void);
+void demoCat(int draw_desktop);
 // flying cube
 void FlyingCubeMove(int number, int direction, float value);
 void demoFlyingCubeSetup(void);

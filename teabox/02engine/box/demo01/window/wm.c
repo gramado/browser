@@ -2,7 +2,7 @@
 // The Window Manager.
 // 2020 - Create by Fred Nora.
 
-#include "gram3d.h"
+#include "../gram3d.h"
 
 extern int comp_config_use_mouse;
 
@@ -5149,7 +5149,7 @@ struct gws_window_d *gws_window_from_id (int id)
 // quando uma tag eh acionada, o wm exibe 
 // todos os aplicativos que usam essa tag.
 // game1: This is a status bar.
-void create_taskbar(unsigned long tb_height)
+int create_taskbar(struct gws_window_d *parent_window)
 {
     int WindowId = -1;  // bar
     int menu_wid;       // button
@@ -5157,8 +5157,27 @@ void create_taskbar(unsigned long tb_height)
     unsigned int frame_color  = 0x00C3C3C3; //COLOR_GRAY;
     unsigned int client_color = 0x00C3C3C3; //COLOR_GRAY;
 
+    /*
+    // The viewport is not the device anymore, 
+    // now, its a window.
     unsigned long w = gws_get_device_width();
     unsigned long h = gws_get_device_height();
+    if (w==0 || h==0)
+    {
+        gwssrv_debug_print ("create_taskbar: w h\n");
+        printf             ("create_taskbar: w h\n");
+        exit(1);
+    }
+    */
+
+// Parameter:
+    if ((void*) parent_window == NULL)
+        return -1;
+    if (parent_window->magic !=1234)
+        return -1;
+
+    unsigned long w = (unsigned long) parent_window->absolute_x;
+    unsigned long h = (unsigned long) parent_window->absolute_y;
     if (w==0 || h==0)
     {
         gwssrv_debug_print ("create_taskbar: w h\n");
@@ -5168,12 +5187,13 @@ void create_taskbar(unsigned long tb_height)
 
 // Taskbar.
 // Create  window.
+    unsigned long tb_height = (h/8);
 
     if (tb_height<40){
         tb_height = 40;
     }
     if(tb_height >= h){
-        tb_height = h-40;
+        tb_height = h/2;
     }
 
     unsigned long wLeft   = (unsigned long) 0;
@@ -5181,6 +5201,7 @@ void create_taskbar(unsigned long tb_height)
     unsigned long wWidth  = (unsigned long) w;
     unsigned long wHeight = (unsigned long) tb_height;  //40;
 
+    // gui->screen_window is an option.
     taskbar_window = 
         (struct gws_window_d *) CreateWindow ( 
                                     WT_SIMPLE, 
@@ -5189,13 +5210,13 @@ void create_taskbar(unsigned long tb_height)
                                     1, //view
                                     "TaskBar",  
                                     wLeft, wTop, wWidth, wHeight,   
-                                    gui->screen_window, 0, 
+                                    parent_window, 0, 
                                     frame_color, 
                                     client_color );
 
 
 
-    if ( (void *) taskbar_window == NULL )
+    if ((void *) taskbar_window == NULL)
     {
         gwssrv_debug_print ("create_taskbar: taskbar_window\n"); 
         printf             ("create_taskbar: taskbar_window\n");
@@ -5362,6 +5383,8 @@ void create_taskbar(unsigned long tb_height)
 */
 
     //gwssrv_debug_print ("gwssrv: create_taskbar: done\n");
+
+    return 0;
 }
 
 // Create root window
@@ -5373,14 +5396,22 @@ struct gws_window_d *wmCreateRootWindow(void)
 // It's because we need a window for drawind a frame.
 // WT_OVERLAPPED needs a window and WT_SIMPLE don't.
     unsigned long rootwindow_valid_type = WT_SIMPLE;
+
+    /*
+    // Using the device context
     unsigned long left = 0;
     unsigned long top = 0;
-//#bugbug: Estamos confiando nesses valores.
-// #bugbug: Estamos usado device info sem checar.
     unsigned long width  = (unsigned long) (__device_width  & 0xFFFF );
     unsigned long height = (unsigned long) (__device_height & 0xFFFF );
+    */
 
-    if (__device_width == 0 || __device_height == 0 )
+    // Using the viewport context
+    unsigned long left   = ViewportInfo.left;
+    unsigned long top    = ViewportInfo.top;
+    unsigned long width  = (unsigned long) (ViewportInfo.width);
+    unsigned long height = (unsigned long) (ViewportInfo.height);
+
+    if (width == 0 || height == 0 )
     {
         debug_print("wmCreateRootWindow: w h\n");
         printf     ("wmCreateRootWindow: w h\n");
@@ -5461,6 +5492,13 @@ struct gws_window_d *wmCreateRootWindow(void)
 
 // Root window
     gwsDefineInitialRootWindow(w);
+
+    //#debug
+    flush_window(w);
+
+    //#debug
+    //printf ("root top: %d\n",w->absolute_y);
+    //while(1){}
 
 // #warning
 // Do not register now.

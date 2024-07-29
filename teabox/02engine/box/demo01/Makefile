@@ -131,7 +131,7 @@ all-c:
 
 	$(CC)  -c  line.c      $(user_ccflags) $(CINCLUDES) -o line.o
 	$(CC)  -c  rect.c      $(user_ccflags) $(CINCLUDES) -o rect.o
-	$(CC)  -c  window.c    $(user_ccflags) $(CINCLUDES) -o window.o
+	$(CC)  -c  window/window.c  $(user_ccflags) $(CINCLUDES) -o window.o
 	$(CC)  -c  gws.c       $(user_ccflags) $(CINCLUDES) -o gws.o
 	$(CC)  -c  comp.c      $(user_ccflags) $(CINCLUDES) -o comp.o
 	$(CC)  -c  bmp.c       $(user_ccflags) $(CINCLUDES) -o bmp.o
@@ -158,7 +158,7 @@ grprim.o camera.o world.o proj.o sprite.o models.o surface.o demos.o
 	$(CC)  -c  font.c      $(user_ccflags) $(CINCLUDES) -o font.o
 	$(LD) -r -o archive_extra.o  xxxinput.o font.o 
 
-	$(CC)  -c  wm.c   $(user_ccflags) $(CINCLUDES) -I include/  -o wm.o
+	$(CC)  -c  window/wm.c   $(user_ccflags) $(CINCLUDES) -I include/  -o wm.o
 
 #
 # == imported objects =============================

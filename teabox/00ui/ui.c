@@ -277,28 +277,7 @@ browserProcedure(
         if (event_window == __button_window){
             printf("browser: button clicked\n");
         }
-        // #test
-        // Initializing the 3D engine.
-        //see: main function in demo01main.c in box/demo01/.
-        // Get info about the main window.
-        // IN: fd, wid, window info structure.
-        gws_get_window_info(
-            fd, 
-            __main_window,   // The app window.
-            (struct gws_window_info_d *) &mwWindowInfo );
- 
-        status = 
-            (int) demo01main(
-                (mw_left + mwWindowInfo.cr_left + cw_left ), 
-                (mw_top  + mwWindowInfo.cr_top  + cw_top ), 
-                cw_width, 
-                cw_height );  
-        
-        
-        if (status != 0){
-            printf ("ui.c: demo01 initialization failed\n");
-            exit(1);
-        }
+
         return 0;
         break;
 
@@ -312,6 +291,32 @@ browserProcedure(
     case MSG_CLOSE:
         printf ("browser.bin: MSG_CLOSE\n");
         
+        // #test
+        // Initializing the 3D engine.
+        //see: main function in demo01main.c in box/demo01/.
+        // Get info about the main window.
+        // IN: fd, wid, window info structure.
+        gws_get_window_info(
+            fd, 
+            __main_window,   // The app window.
+            (struct gws_window_info_d *) &mwWindowInfo );
+ 
+        // client rect: Absolutes
+        //printf ("top: %d\n",mwWindowInfo.cr_top);
+        // OK for root window
+        status = 
+            (int) demo01main(
+                mw_left + mwWindowInfo.cr_left, 
+                mw_top  + mwWindowInfo.cr_top, 
+                mwWindowInfo.cr_width, 
+                mwWindowInfo.cr_height );  
+
+        
+        if (status != 0){
+            printf ("ui.c: demo01 initialization failed\n");
+            exit(1);
+        }
+
         // #test
         demo01_tests(1);
         demo01_tests(2);
@@ -588,7 +593,7 @@ int uiInitialize( int argc, char *argv[] )
 // pinta na client area.
 
     cw_left = 4;
-    cw_top = 4 +24 +4;
+    cw_top  = 4 +24 +4;
     cw_width  = (w_width>>1);
     cw_height = (w_height>>1);
 
