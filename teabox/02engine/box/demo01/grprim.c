@@ -114,6 +114,11 @@
 static unsigned long HotSpotX=0;
 static unsigned long HotSpotY=0;
 
+void grprim_update_hotspot(unsigned long hotspotx, unsigned long hotspoty)
+{
+    HotSpotX = hotspotx;
+    HotSpotY = hotspoty;
+}
 
 // =============================
 /*
@@ -147,6 +152,7 @@ int grInit (void)
     
     HotSpotX = (deviceWidth>>1);
     HotSpotY = (deviceHeight>>1);
+    //grprim_update_hotspot(..)
 
 // == Projection =========
 // Initialize the current projection.
@@ -1990,7 +1996,6 @@ plotTriangleF(
         t->p[2].y = (float) (t->p[2].y/t->p[2].z * tanf(45.5f/2));
     }
 */
-
 
 // ------------------
 // Scaling.

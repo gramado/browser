@@ -1462,8 +1462,9 @@ static int initGraphics(void)
     //gws_show_backbuffer();
     //while(1){}
 
+// 3D 
 // Initialize the graphics support.
-// Now we can use 3d routines.
+// Now we can use 3D routines.
 // See: grprim.c
     
     //gwssrv_debug_print ("initGraphics: Calling grInit() \n");
@@ -3784,15 +3785,17 @@ int demo01_tests(int index)
 
         // 2D
         // Running in the viewport.
+        // see: demos.c
         case 1:
             demoCat();
             break;
         
         // 3D
         // Running in fullscreen for now.
+        // see: demos.c
         case 2:
             demoFlyingCubeSetup();
-            for  (i=0 ; i<10000; i++){
+            for  (i=0 ; i<100000; i++){
                 demoFlyingCube(FALSE,COLOR_BLACK);   
             }
             break;

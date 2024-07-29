@@ -356,6 +356,7 @@ static void drawTerrain(struct cube_model_d *cube, float fElapsedTime)
         // uma rotina 2D de rasterização.
         // Isso será feito pela rotina de contrução de triangulos.
         int fill_triangle = TRUE;
+        /*
         if ( (void*) __root_window != NULL )
         {
             if (cull==FALSE)
@@ -375,6 +376,29 @@ static void drawTerrain(struct cube_model_d *cube, float fElapsedTime)
                     0 ); 
             }
         }
+        */
+       
+        if ( (void*) __demo_window != NULL )
+        {
+            if (cull == FALSE)
+            {
+                // The 'image space'.
+                // Our image space is not 1:1:1
+                // It's something like 2:2:1000
+                // No z normalization
+                // #bugbug
+                // We have a scale factor do x and y.
+                // But we do not have a scale factor for z.
+                // So, z can be any vallur between 0.01f and 1000.0f.
+                plotTriangleF(
+                    (struct gws_window_d *) __demo_window, 
+                    (struct gr_triangleF3D_d *) &triRotatedXYZ,
+                    fill_triangle,
+                    0 ); 
+            }
+        }
+
+
     };
 }
 
@@ -766,6 +790,7 @@ static void drawFlyingCube(struct cube_model_d *cube, float vel)
             // So, z can be any vallur between 0.01f and 1000.0f.
             // #todo
             // Maybe this function can accept more parameters.
+            /*
             if ( (void*) __root_window != NULL )
             {
                 plotTriangleF(
@@ -774,6 +799,17 @@ static void drawFlyingCube(struct cube_model_d *cube, float vel)
                     fill_triangle,
                     0 );
             }
+            */
+            
+            if ( (void*) __demo_window != NULL )
+            {
+                plotTriangleF(
+                    (struct gws_window_d *) __demo_window, 
+                    (struct gr_triangleF3D_d *) &triRotatedXYZ,
+                    fill_triangle,
+                    0 );
+            }
+
         }
 
     };  // loop: Number of triangles.
@@ -887,6 +923,12 @@ void demoCat(void)
            __demo_window = dw;
        }
     }
+
+    // Update hotspot position for the center of the window.
+    unsigned long hsx = (unsigned long) ( ViewportInfo.left + (ViewportInfo.width/2)  );
+    unsigned long hsy = (unsigned long) ( ViewportInfo.top  + (ViewportInfo.height/2) );
+    grprim_update_hotspot( hsx, hsy );
+
 //---------------------
 
 // depth clipping
@@ -939,7 +981,13 @@ void demoTriangle(void)
 // Create a demo window
     struct gws_window_d *dw;
     dw = NULL;
-    dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
+    //dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
+    dw = 
+        (struct gws_window_d *) __create_demo_window(
+            ViewportInfo.left,
+            ViewportInfo.top,
+            ViewportInfo.width,
+            ViewportInfo.height );
     if( (void*) dw != NULL )
     {
        if(dw->magic==1234){
@@ -1347,6 +1395,39 @@ void demoFlyingCubeSetup(void)
 // Clear the buffer for the string in the yellow bar.
     memset(buf_fps,0,64);
 
+//--------------------------------
+// Create a demo window
+    struct gws_window_d *dw;
+    dw = NULL;
+    //dw = (struct gws_window_d *) __create_demo_window(8,8,200,140);
+    dw = 
+        (struct gws_window_d *) __create_demo_window(
+            ViewportInfo.left,
+            ViewportInfo.top,
+            ViewportInfo.width,
+            ViewportInfo.height );
+
+    if ((void*) dw != NULL)
+    {
+       if(dw->magic == 1234){
+           __demo_window = dw;
+       }
+    }
+
+// #test
+// Reinitializing projection, using the viewport values.
+// Using float.
+// Its working
+    grInitializeProjection( 
+        (float) 0.01f, 
+        (float) 1000.0f, 
+        (float) 90.0f,
+        (unsigned long) (ViewportInfo.width & 0xFFFFFFFF),
+        (unsigned long) (ViewportInfo.height & 0xFFFFFFFF),
+        (float) 0.5f );  //#important: Scale factor.
+//--------------------------------
+
+
 /*
     for (i=0; i<8; i++){
         cube_x[i] = (float) 0.0f;
@@ -1541,7 +1622,8 @@ void demoFlyingCube(int draw_desktop, unsigned int bg_color)
 // -------------------------
 // Clear canvas.
     //demoClearWA(COLOR_BLACK);            //clear surface
-    gramado_clear_surface(NULL,bg_color);  //clear surface
+    //gramado_clear_surface(NULL,bg_color);  //clear surface
+    gramado_clear_surface(__demo_window,bg_color);  //clear surface
 
 // -------------------------
 // Draw desktop?
@@ -1621,6 +1703,7 @@ void demoFlyingCube(int draw_desktop, unsigned int bg_color)
     yellowstatus0(buf_fps,FALSE);
 
 // Flush the backbuffer into the framebuffer.
-    gramado_flush_surface(NULL);
+    //gramado_flush_surface(NULL);
+    gramado_flush_surface(__demo_window);
 }
 

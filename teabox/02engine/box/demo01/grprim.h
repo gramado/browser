@@ -10,6 +10,8 @@
 #ifndef __GRPRIM_H
 #define __GRPRIM_H   1
 
+void grprim_update_hotspot(unsigned long hotspotx, unsigned long hotspoty);
+
 //================================================
 // The Perspective Calculation
 // we can calculate the location of a 3D vertex in a 
