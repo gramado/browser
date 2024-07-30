@@ -70,13 +70,13 @@ LIBGR3D   = 02engine/box/libs/libgr3d/include/
 LIBBOXOBJ = 02engine/box/bin
 
 # Objects
-myObjects = crt0.o main.o ui.o rtl.o \
+myObjects = crt0.o main.o globals.o ui.o rtl.o \
 ctype.o stdio.o fcntl.o stdlib.o string.o \
 unistd.o termios.o ioctl.o socket.o \
 libgws.o    
 
 myObjects += demo01main.o
-myObjects += globals.o 
+myObjects += engglob.o 
 myObjects += libdisp.o
 myObjects += libgr.o
 myObjects += libgr3d.o
@@ -100,6 +100,11 @@ main.o:
 -I include/ -o main.o
 
 all-c:
+
+	gcc -c globals.c $(CFLAGS) \
+-I $(LIBC) -I $(LIBGWS) -I $(LIBDISP) -I $(LIBGR) -I $(LIBGR3D) \
+-I include/ -o globals.o
+
 	gcc -c 00ui/ui.c  $(CFLAGS) \
 -I $(LIBC) -I $(LIBGWS) -I $(LIBDISP) -I $(LIBGR) -I $(LIBGR3D) \
 -I include/ -o ui.o
@@ -131,7 +136,7 @@ all-c:
 # Import the rest of the libs from box/
 
 	cp $(LIBBOXOBJ)/demo01main.o  .
-	cp $(LIBBOXOBJ)/globals.o  .
+	cp $(LIBBOXOBJ)/engglob.o  .
 	cp $(LIBBOXOBJ)/libdisp.o  .
 	cp $(LIBBOXOBJ)/libgr.o  .
 	cp $(LIBBOXOBJ)/libgr3d.o  .

@@ -21,6 +21,8 @@
 
 //#include "your/assets/..."
 
+#include "globals.h"
+
 #include "00ui/ui.h"
 #include "01net/net.h"
 #include "02engine/engine.h"
@@ -40,7 +42,7 @@
 
 // #internal representation of the protocol indexes.
 #include "02engine/box/src/protint.h"
-#include "02engine/box/src/globals.h"
+#include "02engine/box/src/engglob.h"
 #include "02engine/box/src/colors.h"
 #include "02engine/box/src/nc2.h"   //nelson cole 2 font. 8x8
 // Graphics device library.
@@ -123,8 +125,6 @@
 
 //#important
 // Do not include gram3d.h. It's redundant.
-
-int uiInitialize( int argc, char *argv[] );
 
 #endif   
 

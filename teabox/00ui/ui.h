@@ -3,7 +3,7 @@
 #ifndef __00UI_UI_H
 #define __00UI_UI_H   1
 
-int dummyui;
+int uiInitialize(void);
 
 #endif   
 

@@ -1,4 +1,5 @@
-// globals.c
+// engglob.c
+// Globals for the engine only.
 // Created by Fred Nora.
 
 #include "gram3d.h"

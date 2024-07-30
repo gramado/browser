@@ -26,7 +26,7 @@ extern int current_mode;
 // but it doesn't use the same names.
 #include "protint.h"
 
-#include "globals.h"
+#include "engglob.h"
 
 #include "colors.h"
 #include "nc2.h"   //nelson cole 2 font. 8x8

@@ -1,4 +1,4 @@
-// globals.h
+// engglob.h
 // Created by Fred Nora.
 
 #ifndef __GWSSRV_GLOBALS_H

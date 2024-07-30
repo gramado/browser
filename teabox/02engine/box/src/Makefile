@@ -99,7 +99,7 @@ myObjects = crt0.o demo01main.o rtl.o \
 ctype.o stdio.o stdlib.o string.o conio.o socket.o signal.o unistd.o \
 termios.o ioctl.o fcntl.o    
 
-myObjects += globals.o 
+myObjects += engglob.o 
 myObjects += libdisp.o
 myObjects += libgr.o
 myObjects += libgr3d.o
@@ -119,8 +119,8 @@ all: main.o all-c gws-link finalize clean
 	@echo "Ok?"
 
 main.o:
-	$(CC)  -c  demo01main.c  $(user_ccflags) $(CINCLUDES) -o demo01main.o
-	$(CC)  -c  globals.c     $(user_ccflags) $(CINCLUDES) -o globals.o
+	$(CC) -c demo01main.c $(user_ccflags) $(CINCLUDES) -o demo01main.o
+	$(CC) -c engglob.c    $(user_ccflags) $(CINCLUDES) -o engglob.o
 
 all-c:
 

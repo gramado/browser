@@ -408,7 +408,7 @@ static int do_event_loop(int fd)
     return 0;
 }
 
-int uiInitialize( int argc, char *argv[] )
+int uiInitialize(void)
 {
 
 //----------------
