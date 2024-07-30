@@ -786,7 +786,7 @@ static void dispacher(int fd)
 // Vamos sinalizar o tipo de resposta que temos que enviar,
 // caso nenhum erro aconteça.
     int doSendEvent = FALSE;
-    if ( message_buffer[1] == GWS_GetNextEvent ){
+    if (message_buffer[1] == __GWS_GetNextEvent){
         doSendEvent = TRUE;
     }
 
@@ -1046,7 +1046,7 @@ gwsProcedure (
 
     // If we received the message GWS_Quit and
     // there is no more windows, so quit the application.
-    case GWS_Quit:
+    case __GWS_Quit:
         if( windows_count == 0 ){
             //#todo: Não pode ter janelas abertas.
             IsTimeToQuit=TRUE;
@@ -1075,7 +1075,7 @@ gwsProcedure (
     // Draw text inside the root window.
     // screen_window = __root_window
 
-    case GWS_Hello:
+    case __GWS_Hello:
         gwssrv_debug_print ("gwssrv: Message number 1000\n");
         //#bugbug: Esse endereço de estrutura esta mudando para um valor
         //que nao podemos acessar em ring3.
@@ -1096,27 +1096,27 @@ gwsProcedure (
     // Create Window
     // Usará o buffer global
     // See: window.c
-    case GWS_CreateWindow:
+    case __GWS_CreateWindow:
         gwssrv_debug_print ("gwssrv: [1001] serviceCreateWindow\n");
         serviceCreateWindow(client_fd);
         NoReply = FALSE;   // We need to return the window id.
         break; 
 
     // backbuffer putpixel
-    case GWS_BackbufferPutPixel:
+    case __GWS_BackbufferPutPixel:
         servicepixelBackBufferPutpixel(); 
         NoReply = FALSE;    //The client-side library is waiting for response.
         break;
 
     // backbuffer draw horizontal line
-    case GWS_DrawHorizontalLine:
+    case __GWS_DrawHorizontalLine:
         servicelineBackbufferDrawHorizontalLine();
         NoReply = FALSE;  //  //The client-side library is waiting for response.
         break;
 
     // Draw char
     // See: char.c
-    case GWS_DrawChar:
+    case __GWS_DrawChar:
         gwssrv_debug_print ("gwssrv: [1004] serviceDrawChar\n");
         serviceDrawChar();
         //NoReply = FALSE;  // asyncronous
@@ -1126,7 +1126,7 @@ gwsProcedure (
 
 // Draw text
 // See: dtext.c
-    case GWS_DrawText:
+    case __GWS_DrawText:
         gwssrv_debug_print ("gwssrv: [1005] serviceDrawText\n");
         serviceDrawText();
         //NoReply = FALSE;  // The client-side library is waiting for response.
@@ -1135,7 +1135,7 @@ gwsProcedure (
 
 
     // Refresh window
-    case GWS_RefreshWindow:
+    case __GWS_RefreshWindow:
         gwssrv_debug_print ("gwssrv: [1006] serviceRefreshWindow\n");
         serviceRefreshWindow();
         //NoReply = FALSE;
@@ -1143,7 +1143,7 @@ gwsProcedure (
         break;
 
      // Redraw window
-     case GWS_RedrawWindow:
+     case __GWS_RedrawWindow:
          gwssrv_debug_print ("gwssrv: [1007] serviceRedrawWindow\n");
          serviceRedrawWindow();
          //NoReply = FALSE;
@@ -1151,13 +1151,13 @@ gwsProcedure (
          break;
 
     // Resize window
-    case GWS_ResizeWindow:
+    case __GWS_ResizeWindow:
         gwssrv_debug_print ("gwssrv: [1008] serviceResizeWindow\n");
         serviceResizeWindow();
         NoReply = FALSE;
         break;
 
-    case GWS_ChangeWindowPosition:
+    case __GWS_ChangeWindowPosition:
         gwssrv_debug_print ("gwssrv: [1009] serviceChangeWindowPosition\n");
         serviceChangeWindowPosition();
         NoReply = FALSE;
@@ -1167,7 +1167,7 @@ gwsProcedure (
 
     // backbuffer putpixel. (again)
     // IN: Color, x, y,rop
-    case GWS_BackbufferPutPixel2:
+    case __GWS_BackbufferPutPixel2:
         libdisp_backbuffer_putpixel ( 
             (unsigned long) COLOR_PINK, 
             (unsigned long) long1, 
@@ -1182,13 +1182,13 @@ gwsProcedure (
     // Disconnect.
     // shutdown.
     // Um cliente quer se desconectar.
-    case GWS_Disconnect:
+    case __GWS_Disconnect:
         gwssrv_debug_print ("gwssrv: [2010] Disconnect\n");
         // DisconnectCurrentClient = TRUE;  // #todo
         // NoReply = TRUE;  // #todo
         break;
 
-    case GWS_RefreshScreen:
+    case __GWS_RefreshScreen:
         gws_show_backbuffer();
         //NoReply = FALSE;      // #todo
         break;
@@ -1196,7 +1196,7 @@ gwsProcedure (
 
     // Refresh rectangle ... 
     // See: wm.c
-    case GWS_RefreshRectangle:
+    case __GWS_RefreshRectangle:
         gwssrv_debug_print ("gwssrv: [2021] serviceRefreshRectangle\n");
         serviceRefreshRectangle();
         NoReply = FALSE;
@@ -1212,14 +1212,14 @@ gwsProcedure (
         break;
 
 // The server will return an event from the its client's event queue.
-    case GWS_GetNextEvent:
+    case __GWS_GetNextEvent:
         gwssrv_debug_print ("gwssrv: [2031] serviceNextEvent\n");
         serviceNextEvent();
         NoReply = FALSE; // Yes. We need a reply.
         break;
 
     // See: grprim.c
-    case GWS_GrPlot0:  
+    case __GWS_GrPlot0:  
         gwssrv_debug_print ("gwssrv: [2040] serviceGrPlot0\n");
         serviceGrPlot0();  
         NoReply = FALSE;
@@ -1227,7 +1227,7 @@ gwsProcedure (
 
     //#deprecated
     // See: grprim.c
-    case GWS_GrCubeZ:  
+    case __GWS_GrCubeZ:  
         //gwssrv_debug_print ("gwssrv: [2041] serviceGrCubeZ\n");
         //serviceGrCubeZ();  
         NoReply = FALSE;
@@ -1235,7 +1235,7 @@ gwsProcedure (
 
     //#deprecated
     // See: grprim.c
-    case GWS_GrRectangle:  
+    case __GWS_GrRectangle:  
         //gwssrv_debug_print ("gwssrv: [2042] serviceGrRectangle\n");
         //serviceGrRectangle();  
         NoReply = FALSE;
@@ -1247,20 +1247,20 @@ gwsProcedure (
 
     // #test
     // async command: 
-    case GWS_AsyncCommand:
+    case __GWS_AsyncCommand:
         gwssrv_debug_print ("gwssrv: [2222] calling serviceAsyncCommand\n");
                   //printf ("gwssrv: [2222] calling serviceAsyncCommand\n");
         serviceAsyncCommand();
         NoReply = TRUE;         // Do not send a reply.
         break;
 
-    case GWS_PutClientMessage:
+    case __GWS_PutClientMessage:
         gwssrv_debug_print ("gwssrv: [GWS_PutClientMessage]\n");
         servicePutClientMessage();
         NoReply = TRUE;
         break;
 
-    case GWS_GetClientMessage:
+    case __GWS_GetClientMessage:
         gwssrv_debug_print ("gwssrv: [GWS_GetClientMessage]\n");
         serviceGetClientMessage();
         NoReply = FALSE;
@@ -1268,11 +1268,11 @@ gwsProcedure (
 
 // Let's get one event from the client's event queue.
 // Send it as a response.
-    case GWS_DrainInput:
+    case __GWS_DrainInput:
         gwssrv_debug_print("gwssrv: gwsProcedure 8080\n");
         break;
 
-    case GWS_GetWindowInfo:
+    case __GWS_GetWindowInfo:
         serviceGetWindowInfo();
         NoReply = FALSE;   // YES, send the response with the data.
         break;
@@ -1281,7 +1281,7 @@ gwsProcedure (
 // #test
 // Clone and execute a process, given the image name.
 // 9099
-    case GWS_CloneAndExecute:
+    case __GWS_CloneAndExecute:
         printf("9099\n");
         serviceCloneAndExecute();
         NoReply = TRUE;
@@ -1300,7 +1300,6 @@ gwsProcedure (
 
     return (int) Status;
 }
-
 
 static void initBackground(void)
 {
@@ -1796,26 +1795,23 @@ static int serviceGetWindowInfo(void)
 
     wid      = (int) message_address[0];  // window id 
     msg_code = (int) message_address[1];  // message code
-    if(wid<0 || wid >= WINDOW_COUNT_MAX)
+    if (wid<0 || wid >= WINDOW_COUNT_MAX)
     {
         goto fail;
     }
-    if(msg_code != GWS_GetWindowInfo)
-    {
+    if (msg_code != __GWS_GetWindowInfo){
         goto fail;
     }
 
 // Window
-
     w = (struct gws_window_d *) windowList[wid];
-    if( (void*) w == NULL )
-    {
+    if ((void*) w == NULL){
         goto fail;
     }
-    if(w->used!=TRUE){
+    if (w->used != TRUE){
         goto fail;
     }
-    if(w->magic!=1234){
+    if (w->magic != 1234){
         goto fail;
     }
 
@@ -2175,7 +2171,7 @@ static int
 serviceCreateWindow (int client_fd)
 {
 // The structure for the standard request.
-    gReq r;
+    gReqInt r;
 //loop
     register int i=0;
 // The buffer is a global variable.
@@ -2785,18 +2781,14 @@ int serviceRedrawWindow (void)
     }
 
 // Get the window structure given the id.
-
     window = (struct gws_window_d *) windowList[window_id];
-    
-    if ( (void *) window == NULL ){
-        gwssrv_debug_print ("serviceRedrawWindow: [FAIL] window\n");
+    if ((void *) window == NULL){
+        gwssrv_debug_print ("serviceRedrawWindow: window\n");
         goto fail;
     }
-    
-    if ( window->used != TRUE || 
-         window->magic != 1234 )
+    if ( window->used != TRUE || window->magic != 1234 )
     {
-        gwssrv_debug_print ("serviceRedrawWindow: [FAIL] window validation\n");
+        gwssrv_debug_print ("serviceRedrawWindow: window validation\n");
         goto fail;
     }
 
@@ -2845,8 +2837,7 @@ serviceRefreshRectangle (void)
     debug_print("serviceRefreshRectangle:\n");
     //asm("cli");
 
-    if( msg_code != GWS_RefreshRectangle )
-    {
+    if (msg_code != __GWS_RefreshRectangle){
         goto fail;
         //return -1;
     }
@@ -2940,25 +2931,19 @@ int serviceRefreshWindow (void){
         //return -1;
     }
 
-    //#todo
-    // Get the window structure given the id.
+// Get the window structure given the id.
     window = (struct gws_window_d *) windowList[window_id];
-   
-    if ( (void *) window == NULL )
-    {
-        gwssrv_debug_print ("serviceRefreshWindow: [FAIL] window\n");
+    if ((void *) window == NULL){
+        gwssrv_debug_print ("serviceRefreshWindow: window\n");
         goto fail;
         //return -1;
     }
-
     if ( window->used != TRUE || window->magic != 1234 )
     {
-        gwssrv_debug_print ("serviceRefreshWindow: [FAIL] window validation\n");
+        gwssrv_debug_print ("serviceRefreshWindow: window validation\n");
         goto fail;
         //return -1;
     }
-
-
 
 // #todo
 // simply invalidate the window and let the compositor do its job.
@@ -2996,19 +2981,17 @@ static void serviceCloneAndExecute(void)
     register int i=0;
     int string_off=8;
     char *p = (char *) &message_address[string_off];
-    for(i=0; i<256; i++)
+    for (i=0; i<256; i++)
     {
-         buf[i] = *p;
-         p++;
+        buf[i] = *p;
+        p++;
     };
     buf[i] = 0;
 // ==================================
 
     rtl_clone_and_execute(buf);
-
     return;
 }
-
 
 // Draw text.
 // Service 1005
@@ -3118,7 +3101,7 @@ int serviceDrawText (void)
         return -1;
 
     window = (struct gws_window_d *) windowList[window_id];
-    if ( (void*) window == NULL ){ 
+    if ((void*) window == NULL){ 
         return -1; 
     }
     if (window->magic != 1234){
@@ -3144,15 +3127,12 @@ int serviceDrawText (void)
 
     //gws_show_window_rect(window);
     invalidate_window(window);
-
-// ok
     return 0;
 
 crazy_fail:
     debug_print("serviceDrawText: [ERROR] crazy_fail\n");
     return -1;
 }
-
 
 // O buffer é uma global nesse documento.
 static int 

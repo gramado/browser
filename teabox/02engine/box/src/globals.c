@@ -44,14 +44,12 @@ char *screen_number;
 // The refresh is called by refresh_device_screen();
 // It is called explicit by the app.
 // see: screen.h
-struct gws_screen_d  *DeviceScreen;
+struct gws_screen_Internal_d  *DeviceScreen;
 unsigned long screens[MAX_SCREENS];
 
 // See: display.h
-struct gws_display_d  *CurrentDisplay;
-
-struct gws_host_d  *CurrentHost;
-
+struct gws_display_Internal_d  *CurrentDisplay;
+struct gws_host_Internal_d  *CurrentHost;
 
 // #ordem
 // hardware, software

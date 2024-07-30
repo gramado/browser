@@ -93,9 +93,9 @@ unsigned int invert_color(unsigned int color)
 
 void 
 libgws_gr_MultiplyMatrixVector(
-    struct gr_vecF3D_d *i, 
-    struct gr_vecF3D_d *o, 
-    struct gr_mat4x4_d *m )
+    struct libgws_gr_vecF3D_d *i, 
+    struct libgws_gr_vecF3D_d *o, 
+    struct libgws_gr_mat4x4_d *m )
 {
     o->x = 
         i->x * m->m[0][0] + 
@@ -591,7 +591,7 @@ plotCircleZ (
 int 
 gws_plotrectangle (
     int fd,
-    struct gr_rectangle_d *rect )
+    struct libgws_gr_rectangle_d *rect )
 {
     //#deprecated
     return -1;
@@ -601,7 +601,7 @@ gws_plotrectangle (
 int 
 gws_plotcube (
     int fd,
-    struct gr_cube_d *cube )
+    struct libgws_gr_cube_d *cube )
 {
     return -1;
 }

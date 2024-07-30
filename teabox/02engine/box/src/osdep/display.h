@@ -17,8 +17,7 @@
 extern unsigned long screens[MAX_SCREENS];
 
 
-
-struct gws_display_d
+struct gws_display_Internal_d
 {
     int id;
     int used;
@@ -52,13 +51,13 @@ struct gws_display_d
 // The refresh is called by refresh_device_screen();
 // It is called explicit by the app.
 
-    struct gws_screen_d *device_screen;
+    struct gws_screen_Internal_d *device_screen;
 
 // The device screen.
 // The refresh is called by refresh_valid_screen();
 // It is called frequently by the window server.
 
-    struct gws_screen_d *valid_screen;
+    struct gws_screen_Internal_d *valid_screen;
 
 // #test
 // root window for the screen ??
@@ -73,10 +72,10 @@ struct gws_display_d
 
     //...
 
-    struct gws_display_d *next;
+    struct gws_display_Internal_d *next;
 };
 // see: globals.c
-extern struct gws_display_d  *CurrentDisplay;
+extern struct gws_display_Internal_d  *CurrentDisplay;
 
 //#todo
 //#define GWS_DISPLAY_MAX 128;

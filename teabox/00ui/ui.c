@@ -2,6 +2,7 @@
 // User Interface for Gramado Browser.
 // 2020 - Created by Fred Nora.
 
+/*
 // rtl 
 #include <types.h>
 #include <stdio.h>
@@ -15,8 +16,9 @@
 #include <packet.h>
 // The client-side library.
 #include <gws.h>
+*/
 
-
+#include "../browser.h"
 
 //
 // Imported
@@ -328,10 +330,19 @@ browserProcedure(
         }
 
         // #test
-        demo01_tests(1);   // cat
-        demo01_tests(2);  //flying cubes
+        //demo01_tests(1);   // cat
+        //demo01_tests(2);  //flying cubes
         //demo01_tests(3);
         //demo01_tests(4);
+
+        // Calling direct, without using extern
+        demoLines();
+        //demoCat(TRUE);
+        //demoTriangle();
+        // ...
+
+        // #debug
+        while(1){}
 
         gws_destroy_window(fd,__button_window);
         gws_destroy_window(fd,__main_window);

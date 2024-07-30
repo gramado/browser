@@ -57,8 +57,14 @@ CFLAGS += -fno-optimize-sibling-calls
 # NO external libraries.
 LIBC      = 02engine/box/libs/rtl/include/
 LIBCOBJ   = 02engine/box/libs/rtl/obj
+
 LIBGWS    = 02engine/box/libs/libgws/include/
 LIBGWSOBJ = 02engine/box/libs/libgws/obj
+
+LIBDISP   = 02engine/box/libs/libdisp/include/
+LIBGR     = 02engine/box/libs/libgr/include/
+LIBGR3D   = 02engine/box/libs/libgr3d/include/
+
 
 #LIBBOX = 02engine/box/bin/
 LIBBOXOBJ = 02engine/box/bin
@@ -89,15 +95,20 @@ myObjects += math.o
 all: main.o all-c hello-link finalize clean
 	@echo "Ok?"
 main.o:
-	gcc -c main.c $(CFLAGS) -I $(LIBC) -I $(LIBGWS) -I include/ -o main.o
+	gcc -c main.c $(CFLAGS) \
+-I $(LIBC) -I $(LIBGWS) -I $(LIBDISP) -I $(LIBGR) -I $(LIBGR3D) \
+-I include/ -o main.o
+
 all-c:
-	gcc -c 00ui/ui.c  $(CFLAGS) -I $(LIBC) -I $(LIBGWS) -I include/ -o ui.o
+	gcc -c 00ui/ui.c  $(CFLAGS) \
+-I $(LIBC) -I $(LIBGWS) -I $(LIBDISP) -I $(LIBGR) -I $(LIBGR3D) \
+-I include/ -o ui.o
 
 # imports
 # We need to compile the libraries before getting them.
 
 	make -C 02engine/box/libs/
-	make -C 02engine/box/demo01/
+	make -C 02engine/box/src/
 
 	cp $(LIBCOBJ)/crt0.o   .
 	cp $(LIBCOBJ)/rtl.o  .
@@ -147,5 +158,5 @@ clean-all:
 
 	-rm 02engine/box/bin/*.o
 	-rm 02engine/box/libs/*.o
-	-rm 02engine/box/demo01/*.o
+	-rm 02engine/box/src/*.o
 

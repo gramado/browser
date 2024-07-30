@@ -1,5 +1,6 @@
-
 // event.h
+// Internal definition of event.
+// engine.
 
 #ifndef EVENT_H
 #define EVENT_H    1
@@ -10,27 +11,26 @@
 // e a 'mensagem' determina o tipo de evento.
 // alem disso podemos ter mais detalhes
 // como se o evento vem do sistema ou do window server ...
-//
 
 
-struct gws_keyboard_event_d
+struct gws_keyboard_event_Internal_d
 {
     int dummy;
 };
 
-struct gws_mouse_event_d
-{
-    int dummy;
-};
-
-
-struct gws_window_event_d
+struct gws_mouse_event_Internal_d
 {
     int dummy;
 };
 
 
-struct gws_event_d
+struct gws_window_event_Internal_d
+{
+    int dummy;
+};
+
+
+struct gws_event_Internal_d
 {
 
     //todo: the client
@@ -52,36 +52,23 @@ struct gws_event_d
     //unsigned long long6;
 
     
-    struct gws_keyboard_event_d  kEvent;
-    struct gws_mouse_event_d     mEvent;
-    struct gws_window_event_d    wEvent;
+    struct gws_keyboard_event_Internal_d  kEvent;
+    struct gws_mouse_event_Internal_d     mEvent;
+    struct gws_window_event_Internal_d    wEvent;
     // ...
 
-    struct gws_event_d *next;
+    struct gws_event_Internal_d *next;
 };
 
 //#test
-struct gws_event_d  NextSingleEvent;
+struct gws_event_Internal_d  NextSingleEvent;
 
 //#test
 // Main structure for event.
-struct gws_event_d gwsEvent;
+struct gws_event_Internal_d gwsEvent;
 
 //#test
-struct gws_event_d *gwsCurrentEvent;
-
-
-/*
- // uma janela tem o foco de entrada e o cursor esta piscando nela.
-struct gws_keyboad_focus_d
-{
-    struct gws_cliend_d *client;
-    struct gws_window_d* window;
-    
-    //...
-};
-*/
-
+struct gws_event_Internal_d *gwsCurrentEvent;
 
 #endif    
 

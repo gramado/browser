@@ -437,7 +437,7 @@ int control_action(int msg, unsigned long long1)
     close_wid    = (int) w->Controls.close_wid;
     
     switch (msg){
-    case GWS_SysKeyDown:
+    case __GWS_SysKeyDown:
         if(long1==VK_F9)
         {
             //printf("F9\n");
@@ -461,7 +461,7 @@ int control_action(int msg, unsigned long long1)
         }
         return 0;
         break;
-    case GWS_SysKeyUp:
+    case __GWS_SysKeyUp:
         if(long1==VK_F9)
         {
             //printf("F9\n");
@@ -2127,7 +2127,7 @@ void wm_update_window_by_id(int wid)
     invalidate_window(w);
 
     // paint the childs of the window with focus.
-    on_update_window(GWS_Paint);
+    on_update_window(__GWS_Paint);
 
 //#todo: string
     //wm_Update_TaskBar("Win",TRUE);
@@ -2287,7 +2287,7 @@ void wm_update_desktop(int tile, int show)
                 redraw_window(w,FALSE);
 
                 // paint the childs of the window with focus.
-                on_update_window(GWS_Paint);
+                on_update_window(__GWS_Paint);
                 
                 //invalidate_window(w);
             }
@@ -2947,11 +2947,11 @@ menuProcedure(
         yellow_status("In ");
     */
 
-    if(msg<0)
+    if (msg<0)
         return -1;
 
     switch (msg){
-    case GWS_SysKeyUp:
+    case __GWS_SysKeyUp:
         if (long1==VK_F1){
             printf("F1\n");
             return 1;
@@ -3102,65 +3102,65 @@ wmProcedure(
 
     switch(msg){
 
-    case GWS_Create:
+    case __GWS_Create:
         printf("wmProcedure: [1] GWS_Create\n");
         break;
-    case GWS_Destroy:
+    case __GWS_Destroy:
         printf("wmProcedure: [2] GWS_Destroy\n");
         break;
-    case GWS_Move:
+    case __GWS_Move:
         printf("wmProcedure: [3] GWS_Move\n");
         break;
-    case GWS_Size: //get size?
+    case __GWS_Size: //get size?
         printf("wmProcedure: [4] GWS_Size\n");
         break;
-    case GWS_Resize: //set size ?
+    case __GWS_Resize: //set size ?
         printf("wmProcedure: [5] GWS_Resize\n");
         break;
 
     // ...
 
-    case GWS_Close:
+    case __GWS_Close:
         printf("wmProcedure: [7] GWS_Close\n");
         if (long1==0){
             printf("Closing root window.\n");
             //exit(0);
         }
         break;
-    case GWS_Paint:
+    case __GWS_Paint:
         printf("wmProcedure: [8] GWS_Paint\n");
         break;
-    case GWS_SetFocus: // set focus
+    case __GWS_SetFocus: // set focus
         printf("wmProcedure: [9] GWS_SetFocus\n");
         break;
-    case GWS_KillFocus: //kill focus
+    case __GWS_KillFocus: //kill focus
         printf("wmProcedure: [10] GWS_KillFocus\n");
         break;
-    case GWS_Activate:
+    case __GWS_Activate:
         printf("wmProcedure: [11] GWS_Activate\n");
         break;
-    case GWS_ShowWindow:
+    case __GWS_ShowWindow:
         printf("wmProcedure: [12] GWS_ShowWindow\n");
         break;
-    case GWS_SetCursor:
+    case __GWS_SetCursor:
         printf("wmProcedure: [13] GWS_SetCursor\n");
         break;
-    case GWS_Hide:
+    case __GWS_Hide:
         printf("wmProcedure: [14] GWS_Hide\n");
         break;
-    case GWS_Maximize:
+    case __GWS_Maximize:
         printf("wmProcedure: [15] GWS_Maximize\n");
         break;
-    case GWS_Restore:
+    case __GWS_Restore:
         printf("wmProcedure: [16] GWS_Restore\n");
         break;
-    case GWS_ShowDefault:
+    case __GWS_ShowDefault:
         printf("wmProcedure: [17] GWS_ShowDefault\n");
         break;
-    case GWS_SetFocus2:
+    case __GWS_SetFocus2:
         printf("wmProcedure: [18] GWS_SetFocus2\n");
         break;
-    case GWS_GetFocus2:
+    case __GWS_GetFocus2:
         printf("wmProcedure: [19] GWS_GetFocus2\n");
         break;
 
@@ -3173,7 +3173,7 @@ wmProcedure(
 // para ca, depois deixar de usar
 // as rotinas de pintura de cursor que estao no kernel.
 
-    case GWS_MouseMove:
+    case __GWS_MouseMove:
 
         //printf("MOVE\n");
 
@@ -3228,7 +3228,7 @@ wmProcedure(
     // janela que possui o mouse.
     // De acordo com a posição do ponteiro na tela.
     // A partir dai os eventos devem ir para essa janela.
-    case GWS_MousePressed:
+    case __GWS_MousePressed:
     
         //printf("PRESSED\n");
     
@@ -3261,7 +3261,7 @@ wmProcedure(
         break;
 
     // 36
-    case GWS_MouseReleased:
+    case __GWS_MouseReleased:
 
         printf("RELEASED\n");
         
@@ -3272,7 +3272,7 @@ wmProcedure(
 
         // Post it to the app.
         on_mouse_event( 
-            GWS_MouseReleased,              // event type
+            __GWS_MouseReleased,              // event type
             comp_get_mouse_x_position(),    // current cursor x
             comp_get_mouse_y_position() );  // current cursor y
         
@@ -3365,7 +3365,7 @@ wmProcedure(
     // desse tipo de tarefa. Mas editores de texto querem 
     // processar cada tecla digitada.
 
-    case GWS_KeyDown:
+    case __GWS_KeyDown:
         // Imprime o char na janela indicada.
         // Essa é a janela com foco de entrada.
         //if( pre_print === TRUE)
@@ -3392,7 +3392,7 @@ wmProcedure(
     //case GWS_KeyUp:
         //break;
 
-    case GWS_SysKeyDown:
+    case __GWS_SysKeyDown:
         if(long1 == VK_F1){
             // ja esta rodando.
             //if(tb_buttons_status[0] == TRUE)
@@ -3447,7 +3447,7 @@ wmProcedure(
         return 0;
         break;
 
-    case GWS_SysKeyUp:
+    case __GWS_SysKeyUp:
         if(long1 == VK_F1){
             // ja esta rodando.
             //if(tb_buttons_status[0] == TRUE)
@@ -3544,7 +3544,7 @@ wmProcedure(
         break;
 
     // 9090 - ( Shift + F12 )
-    case GWS_SwitchFocus:
+    case __GWS_SwitchFocus:
         //printf("Switch "); fflush(stdout);
         __switch_focus();
         //printf("wmProcedure: [?] GWS_SwitchFocus\n");
@@ -3612,31 +3612,31 @@ static int on_combination(int msg_code)
     if (msg_code<0)
         return -1;
 
-    if (msg_code == GWS_ControlArrowUp){
+    if (msg_code == __GWS_ControlArrowUp){
         //dock_active_window(1);
         FlyingCubeMove(0,4,(float) 0.08f); //back
         return 0;
     }
-    if (msg_code == GWS_ControlArrowRight){
+    if (msg_code == __GWS_ControlArrowRight){
         //dock_active_window(2);
         FlyingCubeMove(0,1,(float) 0.08f);  //left
         return 0;
     }
-    if (msg_code == GWS_ControlArrowDown){
+    if (msg_code == __GWS_ControlArrowDown){
         //dock_active_window(3);
         FlyingCubeMove(0,3,(float) 0.08f); //front
         return 0;
     }
-    if (msg_code == GWS_ControlArrowLeft){
+    if (msg_code == __GWS_ControlArrowLeft){
         //dock_active_window(4); 
         FlyingCubeMove(0,2,(float) 0.08f); //right
         return 0;
     }
 
-    if (msg_code == GWS_Cut)
+    if (msg_code == __GWS_Cut)
     {printf("ws: cut\n"); return 0;}
 
-    if (msg_code == GWS_Copy)
+    if (msg_code == __GWS_Copy)
     {
         printf("ws: copy\n"); 
         
@@ -3648,14 +3648,14 @@ static int on_combination(int msg_code)
         return 0;
     }
 
-    if (msg_code == GWS_Paste)
+    if (msg_code == __GWS_Paste)
     {printf("ws: paste\n"); return 0;}
 
-    if (msg_code == GWS_Undo)
+    if (msg_code == __GWS_Undo)
     {printf("ws: undo\n"); return 0;}
 
 // [control + a]
-    if (msg_code == GWS_SelectAll)
+    if (msg_code == __GWS_SelectAll)
     {
         printf("ws: select all\n");
 
@@ -3672,10 +3672,10 @@ static int on_combination(int msg_code)
     }
 
 
-    if (msg_code == GWS_Find)
+    if (msg_code == __GWS_Find)
     {printf("ws: find\n"); return 0;}
 
-    if (msg_code == GWS_Save)
+    if (msg_code == __GWS_Save)
     {
         printf("Save\n");
         //on_menu();  //#test
@@ -3709,17 +3709,17 @@ static int is_combination(int msg_code)
         return FALSE;
 
     switch (msg_code){
-    case GWS_ControlArrowUp:
-    case GWS_ControlArrowRight:
-    case GWS_ControlArrowDown:
-    case GWS_ControlArrowLeft:
-    case GWS_Cut:
-    case GWS_Copy:
-    case GWS_Paste:
-    case GWS_Undo:
-    case GWS_SelectAll:
-    case GWS_Find:
-    case GWS_Save:
+    case __GWS_ControlArrowUp:
+    case __GWS_ControlArrowRight:
+    case __GWS_ControlArrowDown:
+    case __GWS_ControlArrowLeft:
+    case __GWS_Cut:
+    case __GWS_Copy:
+    case __GWS_Paste:
+    case __GWS_Undo:
+    case __GWS_SelectAll:
+    case __GWS_Find:
+    case __GWS_Save:
     case 88112:
         return TRUE;
         break;
@@ -3767,9 +3767,9 @@ new_event:
     long2 = (unsigned long) RTLEventBuffer[3];
 
 // MOUSE events
-    if ( msg == GWS_MouseMove || 
-         msg == GWS_MousePressed ||
-         msg == GWS_MouseReleased )
+    if ( msg == __GWS_MouseMove || 
+         msg == __GWS_MousePressed ||
+         msg == __GWS_MouseReleased )
     {
         on_mouse_event(
             (int) msg,
@@ -3779,9 +3779,9 @@ new_event:
     }
 
 // Print char into the keyboard owner window.
-    if ( msg == GWS_KeyDown ||
-         msg == GWS_SysKeyDown ||
-         msg == GWS_SysKeyUp )
+    if ( msg == __GWS_KeyDown ||
+         msg == __GWS_SysKeyDown ||
+         msg == __GWS_SysKeyUp )
     {
         on_keyboard_event( 
             (int) msg, (unsigned long) long1, (unsigned long) long2 );
@@ -3905,13 +3905,13 @@ int wmInputReader2(void)
         {
 
             //cut
-            if( RTLEventBuffer[1] == GWS_Cut )
+            if( RTLEventBuffer[1] == __GWS_Cut )
             { printf("wm.c: cut\n"); return 0; }
 
             // [control + c]
             // copy (ok)
             // Quit the program.
-            if( RTLEventBuffer[1] == GWS_Copy )
+            if( RTLEventBuffer[1] == __GWS_Copy )
             { 
                 //printf("wm.c: control + c\n"); 
                 gramado_terminate();
@@ -3919,26 +3919,26 @@ int wmInputReader2(void)
             }
 
             //paste (ok)
-            if( RTLEventBuffer[1] == GWS_Paste )
+            if( RTLEventBuffer[1] == __GWS_Paste )
             { printf("wm.c: paste\n"); return 0; }
 
             //undo
-            if( RTLEventBuffer[1] == GWS_Undo )
+            if( RTLEventBuffer[1] == __GWS_Undo )
             { printf("wm.c: undo\n"); return 0; }
 
             //select all: control+a
-            if( RTLEventBuffer[1] == GWS_SelectAll )
+            if( RTLEventBuffer[1] == __GWS_SelectAll )
             { printf("wm.c: select all\n"); return 0; }
 
             //find: control+f
-            if( RTLEventBuffer[1] == GWS_Find )
+            if( RTLEventBuffer[1] == __GWS_Find )
             { printf("ws: find\n"); return 0; }
 
             // #todo: 
             // we also can use 'keydown' and check the vk.
 
             //Control arrow right
-            if( RTLEventBuffer[1] == GWS_ControlArrowRight )
+            if( RTLEventBuffer[1] == __GWS_ControlArrowRight )
             {
               //printf("ws: Control right\n"); 
               //dock_active_window(2);
@@ -3948,7 +3948,7 @@ int wmInputReader2(void)
               return 0; 
             }
             //Control arrow up
-            if( RTLEventBuffer[1] == GWS_ControlArrowUp )
+            if( RTLEventBuffer[1] == __GWS_ControlArrowUp )
             {
               //printf("ws: Control up\n"); 
               //dock_active_window(1);
@@ -3957,7 +3957,7 @@ int wmInputReader2(void)
               return 0; 
             }
             //Control arrow down
-            if( RTLEventBuffer[1] == GWS_ControlArrowDown )
+            if( RTLEventBuffer[1] == __GWS_ControlArrowDown )
             {
               //printf("ws: Control down\n");
               //dock_active_window(3);
@@ -3966,7 +3966,7 @@ int wmInputReader2(void)
               return 0;
             }
             //Control arrow left
-            if( RTLEventBuffer[1] == GWS_ControlArrowLeft )
+            if( RTLEventBuffer[1] == __GWS_ControlArrowLeft )
             { 
               //printf("ws: Control left\n");
               //dock_active_window(4);
@@ -3978,33 +3978,32 @@ int wmInputReader2(void)
 
 
             // Save: [control + s]
-            if( RTLEventBuffer[1] == GWS_Save )
+            if( RTLEventBuffer[1] == __GWS_Save )
             {
-                 if ( (void*)__root_window != NULL )
-                 {
-                     // cria o menu
-                     // se não tem o context menu. Então cria.
-                     if( (void*) __root_window->contextmenu == NULL ){
-                         create_main_menu(0,0);
-                         return 0;
-                     }
-                     // para de usar o menu
-                     // Se temos o menu e temos a janela do menu.
-                     // repinta ela e mostra.
-                     if( (void*) __root_window->contextmenu->window != NULL )
-                     {
-                         is_menu_active = FALSE;
-                         wm_update_desktop(TRUE,TRUE);
-                         //redraw_window(
-                         //    __root_window->contextmenu->window, 
-                         //    TRUE ); 
-                         return 0;
-                     }
-                 }
-                 //printf("ws: save\n"); 
-                 return 0; 
+                if ( (void*)__root_window != NULL )
+                {
+                    // cria o menu
+                    // se não tem o context menu. Então cria.
+                    if( (void*) __root_window->contextmenu == NULL ){
+                        create_main_menu(0,0);
+                        return 0;
+                    }
+                    // para de usar o menu
+                    // Se temos o menu e temos a janela do menu.
+                    // repinta ela e mostra.
+                    if( (void*) __root_window->contextmenu->window != NULL )
+                    {
+                        is_menu_active = FALSE;
+                        wm_update_desktop(TRUE,TRUE);
+                        //redraw_window(
+                        //    __root_window->contextmenu->window, 
+                        //    TRUE ); 
+                        return 0;
+                    }
+                }
+                //printf("ws: save\n"); 
+                return 0; 
             }
-
 
             // Via alt + f4
             // qemu intercepts this combination.
@@ -4037,9 +4036,9 @@ int wmInputReader2(void)
             }
 
             //#test: MOUSE events
-            if ( RTLEventBuffer[1] == GWS_MouseMove || 
-                 RTLEventBuffer[1] == GWS_MousePressed ||
-                 RTLEventBuffer[1] == GWS_MouseReleased )
+            if ( RTLEventBuffer[1] == __GWS_MouseMove || 
+                 RTLEventBuffer[1] == __GWS_MousePressed ||
+                 RTLEventBuffer[1] == __GWS_MouseReleased )
             {
                 if (comp_config_use_mouse == TRUE)
                 {
@@ -4056,9 +4055,9 @@ int wmInputReader2(void)
             // todo: get time for diagnoses. (jiffies)
             // mensagens desse tipo
             // devem ir para a janela com o foco de entrada.
-            if (RTLEventBuffer[1] == GWS_KeyDown ||
-                RTLEventBuffer[1] == GWS_SysKeyDown ||
-                RTLEventBuffer[1] == GWS_SysKeyUp )
+            if (RTLEventBuffer[1] == __GWS_KeyDown ||
+                RTLEventBuffer[1] == __GWS_SysKeyDown ||
+                RTLEventBuffer[1] == __GWS_SysKeyUp )
             {
 
             //#test
@@ -4081,7 +4080,6 @@ int wmInputReader2(void)
     
     return 0;
 }
-
 
 void wm_change_bg_color(unsigned int color, int tile, int fullscreen)
 {

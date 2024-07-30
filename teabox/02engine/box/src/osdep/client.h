@@ -65,9 +65,9 @@ struct gws_client_d
     int is_connected;
 
 // host, display, screen
-    struct gws_host_d     host;
-    struct gws_display_d  display;  
-    struct gws_screen_d   screen;
+    struct gws_host_Internal_d     host;
+    struct gws_display_Internal_d  display;  
+    struct gws_screen_Internal_d   screen;
 
     // Socket for this client.
     int fd;

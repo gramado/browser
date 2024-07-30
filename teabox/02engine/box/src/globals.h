@@ -27,7 +27,7 @@ extern char *screen_number;
 // The refresh is called by refresh_device_screen();
 // It is called explicit by the app.
 // see: globals.c
-extern struct gws_screen_d  *DeviceScreen;
+extern struct gws_screen_Internal_d  *DeviceScreen;
 
 extern int gUseLeftHand;
 extern int gUseCallback;

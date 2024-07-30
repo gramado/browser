@@ -10,7 +10,7 @@ extern int refresh_device_screen_flag;
 extern int refresh_valid_screen_flag;
 
 
-struct gws_screen_d
+struct gws_screen_Internal_d
 {
     int id;
     int used;
@@ -43,9 +43,8 @@ struct gws_screen_d
     void *frontbuffer;
 
     // Belongs to this display.
-    struct gws_display_d *display;
-    
-    struct gws_screen_d *next;
+    struct gws_display_Internal_d *display;
+    struct gws_screen_Internal_d *next;
 
     struct gws_window_d *root;
 };
@@ -55,7 +54,7 @@ struct gws_screen_d
 // The refresh is called by refresh_device_screen();
 // It is called explicit by the app.
 // see: globals.c
-extern struct gws_screen_d  *DeviceScreen;
+extern struct gws_screen_Internal_d  *DeviceScreen;
 
 //
 // == prototypes ================================

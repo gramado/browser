@@ -5,7 +5,7 @@
 #ifndef ____WINDOW_H
 #define ____WINDOW_H    1
 
-#include "event.h"
+#include "../event.h"
 
 // ===============================================================
 
@@ -499,8 +499,8 @@ struct gws_window_d
 // Controls
     struct windowcontrols_d  Controls;
 // Single event
-    struct gws_event_d  single_event;
-    //struct gws_event_d  *single_event;
+    struct gws_event_Internal_d  single_event;
+    //struct gws_event_Internal_d  *single_event;
 // Event list.
     int ev_head;
     int ev_tail;
@@ -512,7 +512,7 @@ struct gws_window_d
 
 // #todo
 // Event queue.
-     //struct gws_event_d *event_queue;
+     //struct gws_event_Internal_d *event_queue;
 
 // #todo
 // We need to review that list of flags.

@@ -4,7 +4,7 @@
 #ifndef ____HOST_H
 #define ____HOST_H    1
 
-struct gws_host_d
+struct gws_host_Internal_d
 {
     int used;
     int magic;
@@ -13,7 +13,7 @@ struct gws_host_d
     // ...
 };
 // see: globals.c
-extern struct gws_host_d  *CurrentHost;
+extern struct gws_host_Internal_d  *CurrentHost;
 
 #endif    
 

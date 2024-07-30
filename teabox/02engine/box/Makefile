@@ -5,7 +5,7 @@ all:
 # It is compiled in the root folder of the project.
 #	make -C libs/
 
-	make -C demo01/
+	make -C src/
 #...
 
 clean:

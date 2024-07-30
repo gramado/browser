@@ -14,7 +14,7 @@
 #define grMAX3(x,y,z)    ( (x>y) ? ((x>z)?x:z)     : ((y>z)?y:z) )
 
 // float
-struct gr_vecF3D_d
+struct libgws_gr_vecF3D_d
 {
     float x;
     float y;
@@ -25,25 +25,25 @@ struct gr_vecF3D_d
 };
 
 // float 3D triangle
-struct gr_triangleF3D_d
+struct libgws_gr_triangleF3D_d
 {
     int used;
     int magic;
     int initialized;
-    struct gr_vecF3D_d p[3];
+    struct libgws_gr_vecF3D_d p[3];
     // mesh support.
-    struct gr_triangleF3D_d *last;
-    struct gr_triangleF3D_d *next;
+    struct libgws_gr_triangleF3D_d *last;
+    struct libgws_gr_triangleF3D_d *next;
 };
 
 // float
-struct gr_mat4x4_d
+struct libgws_gr_mat4x4_d
 {
     float m[4][4];  // = { 0 };
 };
 
 // int
-struct gr_vec3D_d
+struct libgws_gr_vec3D_d
 {
     int x;
     int y;
@@ -53,26 +53,26 @@ struct gr_vec3D_d
     unsigned int color;
 };
 
-struct gr_line_d
+struct libgws_gr_line_d
 {
-    struct gr_vec3D_d p[2];
+    struct libgws_gr_vec3D_d p[2];
 };
 
-struct gr_triandle_d
+struct libgws_gr_triandle_d
 {
-    struct gr_vec3D_d p[3];
+    struct libgws_gr_vec3D_d p[3];
 };
 
-struct gr_rectangle_d
+struct libgws_gr_rectangle_d
 {
-    struct gr_vec3D_d p[4];
+    struct libgws_gr_vec3D_d p[4];
 };
 
 
 // Cube
-struct gr_cube_d
+struct libgws_gr_cube_d
 {
-    struct gr_vec3D_d p[8];
+    struct libgws_gr_vec3D_d p[8];
 };
 
 
@@ -80,7 +80,7 @@ struct gr_cube_d
 // graphical projection perspective
 // See:
 // https://en.wikipedia.org/wiki/Perspective_(graphical)
-struct gr_projection_d
+struct libgws_gr_projection_d
 {
     // perspective or orthographic
     int type;
@@ -93,7 +93,7 @@ struct gr_projection_d
 // The rectangle that the can see.
 // The limits in z axis. zmin and zmax;
     
-    struct gr_rectangle_d *frustrum_view;   // projection window.
+    struct libgws_gr_rectangle_d *frustrum_view;   // projection window.
     
     int zNear;   // Distance to the near clipping plane along the -Z axis.
     int zFar;    // Distance to the far clipping plane along the -Z axis.
@@ -105,7 +105,7 @@ struct gr_projection_d
 // The apex.
     // mid_x = (left + right) * 0.5;
     // mid_y = (bottom + top)  * 0.5;
-    struct gr_vec3D_d *frustrum_apex;
+    struct libgws_gr_vec3D_d *frustrum_apex;
 
 
  // aspect ratio
@@ -119,16 +119,16 @@ struct gr_projection_d
 
 
 // Camera
-struct gr_camera_d
+struct libgws_gr_camera_d
 {
 
 // position
-    struct gr_vec3D_d position;
-    struct gr_vec3D_d upview;
-    struct gr_vec3D_d lookat;
+    struct libgws_gr_vec3D_d position;
+    struct libgws_gr_vec3D_d upview;
+    struct libgws_gr_vec3D_d lookat;
     // ...
     
-    struct gr_projection_d *projection;
+    struct libgws_gr_projection_d *projection;
 
     // Next node in the linked list.
     //struct gr_camera_d *next;
@@ -153,9 +153,9 @@ unsigned int invert_color(unsigned int color);
 
 void 
 libgws_gr_MultiplyMatrixVector(
-    struct gr_vecF3D_d *i, 
-    struct gr_vecF3D_d *o, 
-    struct gr_mat4x4_d *m );
+    struct libgws_gr_vecF3D_d *i, 
+    struct libgws_gr_vecF3D_d *o, 
+    struct libgws_gr_mat4x4_d *m );
 
 // Plot a point using float.
 int 
@@ -215,13 +215,13 @@ plotCircleZ (
 int 
 gws_plotrectangle (
     int fd,
-    struct gr_rectangle_d *rect );
+    struct libgws_gr_rectangle_d *rect );
 
 // Plot a cube.
 int 
 gws_plotcube (
     int fd,
-    struct gr_cube_d *cube );
+    struct libgws_gr_cube_d *cube );
 
 #endif    
 

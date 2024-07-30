@@ -5,6 +5,25 @@
 #define  __LIBGWS_PROTOCOL_H    1
 
 
+// Current protocol version
+#define GWS_PROTOCOL  1
+
+
+// Um pacote tem o tamanho total de 512 bytes.
+#define sz_gPacket  (512)
+
+// Um request tem o tamanho total de 368 bytes.
+// ((14*8)+256)
+// 112+256
+#define sz_gReq     (368)
+
+// Um reply tem o tamanho total de 368 bytes.
+// ((14*8)+256)
+// 112+256
+#define sz_gRep     (368)
+
+
+
 //
 // Request
 //
