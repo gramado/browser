@@ -1,8 +1,13 @@
-// glob.c
+// globals.c
 // Globals for the project Teabox.
 // Created by Fred Nora.
 
+#include "browser.h"
 
 
-int dummyglob;
+// Global Flags
+// see: main.c
+int gfTest=FALSE;
+int gfAll=FALSE;
+// ...
 

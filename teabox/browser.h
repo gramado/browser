@@ -15,7 +15,7 @@
 #include <netinet/in.h>
 //#include <arpa/inet.h>
 #include <sys/socket.h>
-#include <packet.h>
+#include <base/packet.h>
 // The client-side library.
 #include <gws.h>
 

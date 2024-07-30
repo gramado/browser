@@ -1,8 +1,8 @@
 // engglob.h
 // Created by Fred Nora.
 
-#ifndef __GWSSRV_GLOBALS_H
-#define __GWSSRV_GLOBALS_H   1
+#ifndef __ENGGLOB_H
+#define __ENGGLOB_H   1
 
 // Host Operating System
 #define OS_OTHER    0

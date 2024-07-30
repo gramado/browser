@@ -1,11 +1,15 @@
-// glob.h
+// globals.h
 // Globals for the project Teabox.
 // Created by Fred Nora.
 
-#ifndef __GLOB_H
-#define __GLOB_H
+#ifndef __GLOBALS_H
+#define __GLOBALS_H   1
 
-#define DUMMYGLOB 565656
+// Global Flags
+// see: main.c
+int gfTest;
+int gfAll;
+// ...
 
 #endif 
 
