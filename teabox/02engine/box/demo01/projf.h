@@ -22,6 +22,7 @@ struct gr_projectionF_d
     unsigned long height;
     
     float scale_factor;
+    float fovRad;
     
     //#todo: hotspot
 

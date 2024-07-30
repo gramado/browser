@@ -130,6 +130,8 @@ extern struct gws_window_d *mouse_owner;
 // == Private functions: Prototypes ========
 //
 
+static void flyingCubeDemoLoop(void);
+
 // Worker
 // There is a vetor with values for the next response.
 // Called by dispatcher().
@@ -3280,16 +3282,9 @@ static int InitHot(void)
  *     + Initializes the gws infrastructure.
  *     + Create the background.
  *     + Create the taskbar.
- *     + Register window server as the current window server 
- *       for this desktop.
- *     + Create the server socket.
+ *     + Register the browser.
+ *     + Create the socket.
  *     + bind it.
- *     + Spawn a client process. (gwst.bin)
- *     + Enter in the main loop, waiting for some types of event.
- *       The possible events are: Reading messages from the kernel,
- *       or Reading our socket.
- *       In this moment we can send a response. It depends on the
- *       message found in the sockeck we readed.
  */
 
 static int on_execute(void)
@@ -3307,8 +3302,9 @@ static int on_execute(void)
 // lets return to the UI and use its event loop.
     int UseEventLoop = FALSE;
 
-    //int ShowDemo=FALSE;
-    int ShowDemo=TRUE;
+    int ShowDemo=FALSE;
+    //int ShowDemo=TRUE;
+
     int flagUseClient = FALSE;
     //int flagUseClient = TRUE;
     int UseCompositor = TRUE;  // #debug flags
@@ -3715,8 +3711,8 @@ static int on_execute(void)
         // see: demos.c
         // IN: Draw desktop, color.
         if (ShowDemo){
-            //demoFlyingCube(TRUE,COLOR_BLACK);
-            demoFlyingCube(FALSE,COLOR_BLACK);
+            //demoFlyingCubeDrawScene(TRUE,COLOR_BLACK);
+            demoFlyingCubeDrawScene(FALSE,COLOR_BLACK);
         }
     };
 
@@ -3769,6 +3765,35 @@ static inline void __outb(uint16_t port, uint8_t val)
 */
 
 
+static void flyingCubeDemoLoop(void)
+{
+// called by demo01_tests().
+
+    running = TRUE;
+
+// Initialize the demo.
+    demoFlyingCubeSetup();
+// Loop
+    while (running == TRUE)
+    {
+        //beginTick = (unsigned long) rtl_jiffies();
+
+        //if (IsTimeToQuit == TRUE){
+        //    break;
+        //}
+        
+        // #wrong
+        // The kernel will not send input for us.
+        // The kernel send input to the display server and to the
+        // forground thread.
+        // See: wm.c
+        //wmInputReader();
+        
+        // IN: draw desktop, bg color
+        demoFlyingCubeDrawScene(TRUE,COLOR_BLACK);       
+    };
+}
+
 // Testing demos.
     //demoCat(TRUW);
     //demoCurve();
@@ -3794,13 +3819,7 @@ int demo01_tests(int index)
         // Running in fullscreen for now.
         // see: demos.c
         case 2:
-            demoFlyingCubeSetup();
-            for  (i=0 ; i<100000; i++)
-            {
-                // IN: draw desktop, bg color
-                //demoFlyingCube(FALSE,COLOR_BLACK);
-                demoFlyingCube(TRUE,COLOR_BLACK);   
-            }
+            flyingCubeDemoLoop();
             break;
         
         // Windows
@@ -3833,7 +3852,6 @@ int demo01main(
     ViewportInfo.initialized = TRUE;
     printf ("demo01: ViewportInfo values gotten\n");
 
-
     // It changes when we create the taskbar.
     WindowManager.wa_left   = ViewportInfo.left;
     WindowManager.wa_top    = ViewportInfo.top;
@@ -3842,7 +3860,6 @@ int demo01main(
     // NOT initialized here.
     // we will do this later.
     //WindowManager.initialized = ?; 
-
 
 // #todo
 // Parse the parameters and select the flags.
@@ -3853,15 +3870,13 @@ int demo01main(
 // the fpu context.
     //gUseCallback = TRUE;
     gUseCallback = FALSE;
-// Stating time.
-    starting_tick = (unsigned long) rtl_jiffies();
 
-//0 = Time to quit.
+// Get the stating time
+    starting_tick = (unsigned long) rtl_jiffies();
     Status = (int) on_execute();
     if (Status != 0){
         goto fail;
     }
-
     // Wrong time to quit the server.
     if (IsTimeToQuit != TRUE){
         goto fail;

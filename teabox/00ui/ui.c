@@ -16,6 +16,12 @@
 // The client-side library.
 #include <gws.h>
 
+
+
+//
+// Imported
+//
+
 // Importing from demo01/
 //#include "../02engine/box/demo01/gram3d.h"
 // see: main.c
@@ -32,6 +38,9 @@ extern int demo01main(
 
 extern int demo01_tests(int index);
 
+// ------------------------------
+
+static int isTimeToQuit=FALSE;
 
 // Window Info for main window.
 struct gws_window_info_d mwWindowInfo;
@@ -301,6 +310,7 @@ browserProcedure(
             __main_window,   // The app window.
             (struct gws_window_info_d *) &mwWindowInfo );
  
+        // Initialize
         // client rect: Absolutes
         //printf ("top: %d\n",mwWindowInfo.cr_top);
         // OK for root window
@@ -318,14 +328,16 @@ browserProcedure(
         }
 
         // #test
-        demo01_tests(1);
-        demo01_tests(2);
+        demo01_tests(1);   // cat
+        demo01_tests(2);  //flying cubes
         //demo01_tests(3);
         //demo01_tests(4);
 
         gws_destroy_window(fd,__button_window);
         gws_destroy_window(fd,__main_window);
         exit(0);
+        
+        //isTimeToQuit = TRUE;
         break;
 
     //...
@@ -341,8 +353,9 @@ browserProcedure(
 // GEt events with the display server.
 static int do_event_loop(int fd)
 {
-    struct gws_event_d *e;
+    int UseDemo = TRUE;
 
+    struct gws_event_d *e;
     struct gws_event_d lEvent;
     lEvent.used = FALSE;
     lEvent.magic = 0;
@@ -650,6 +663,15 @@ int uiInitialize( int argc, char *argv[] )
 
 // Call the event loop.
     return (int) do_event_loop(client_fd);
+
+    if (isTimeToQuit)
+    {
+        gws_destroy_window(client_fd,__button_window);
+        gws_destroy_window(client_fd,__main_window);
+        return EXIT_SUCCESS;
+    }
+
+    return EXIT_FAILURE;
 }
 
 //

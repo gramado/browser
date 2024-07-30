@@ -133,11 +133,11 @@ void grprim_update_hotspot(unsigned long hotspotx, unsigned long hotspoty)
 
 int grInit (void)
 {
-    unsigned long deviceWidth = gws_get_device_width();
-    unsigned long deviceHeight = gws_get_device_height();
 
     gwssrv_debug_print ("grInit:\n");
 
+    unsigned long deviceWidth = gws_get_device_width();
+    unsigned long deviceHeight = gws_get_device_height();
     if ( deviceWidth == 0 || deviceHeight == 0 )
     {
         gwssrv_debug_print ("grInit: w h\n");
@@ -145,11 +145,8 @@ int grInit (void)
         exit(1);
     }
 
-// center of the screen.
-// #todo: 
-// We need the option to put the hotspot 
-// at the center of the window.
-    
+// Hotsport at the center of the screen,
+// but we're gonna change this to test a demo inside a viewport.    
     HotSpotX = (deviceWidth>>1);
     HotSpotY = (deviceHeight>>1);
     //grprim_update_hotspot(..)
@@ -157,16 +154,15 @@ int grInit (void)
 // == Projection =========
 // Initialize the current projection.
 // Change the view for the current projection.
-// #test
 // Initialize projection matrix. 
 // Using float.
 // IN: 
-// znear, 
-// zfar, 
-// fov, 
-// width, 
-// height. 
-// Scale factor.
+//   znear, 
+//   zfar, 
+//   fov, 
+//   width, 
+//   height,
+//   Scale factor.
 
 // #todo
 // #important
@@ -180,13 +176,17 @@ int grInit (void)
     //float scale_factor = (float) 1/( tan(VerticalFOV/2 * PI/180) );  //rad
 
 // Using float.
+// See: proj.c
+// IN: 
+// znear, zfar, fov, width, height, Scale factor.
+
     grInitializeProjection( 
         (float) 0.01f, 
         (float) 1000.0f, 
         (float) 90.0f,
         (unsigned long) (deviceWidth & 0xFFFFFFFF),
         (unsigned long) (deviceHeight & 0xFFFFFFFF),
-        (float) 0.5f );  //#important: Scale factor.
+        (float) 0.5f );  //#important: Scale factor. (not in use)
 
 // Using int.
     projection_initialize();

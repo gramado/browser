@@ -1459,7 +1459,7 @@ void demoFlyingCubeSetup(void)
         (float) 90.0f,
         (unsigned long) (ViewportInfo.width & 0xFFFFFFFF),
         (unsigned long) (ViewportInfo.height & 0xFFFFFFFF),
-        (float) 0.5f );  //#important: Scale factor.
+        (float) 0.5f );  //#important: Scale factor. (not in use)
 //--------------------------------
 
 
@@ -1636,7 +1636,7 @@ void demoFlyingCubeSetup(void)
 // given all the dots of this model.
 // We need to create a function that will draw 3D cubes.
 
-void demoFlyingCube(int draw_desktop, unsigned int bg_color)
+void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color)
 {
 // The function on_execute() in main.c initilizes this demos
 // and spins into a loop calling this function to draw

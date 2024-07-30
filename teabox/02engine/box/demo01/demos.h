@@ -19,12 +19,14 @@ void demoPolygon(void);
 void demoPolygon2(void);
 // curve+string
 void demoCurve(void);
+
 // Cat
 void demoCat(int draw_desktop);
+
 // flying cube
 void FlyingCubeMove(int number, int direction, float value);
 void demoFlyingCubeSetup(void);
-void demoFlyingCube(int draw_desktop, unsigned int bg_color);
+void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color);
 
 #endif    
 

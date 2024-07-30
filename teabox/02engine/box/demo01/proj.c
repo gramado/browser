@@ -170,22 +170,23 @@ grInitializeProjection(
     float fov,
     unsigned long width,
     unsigned long height,
-    float scalefactor )
+    float scalefactor ) 
 {
-// Projection Matrix
+// Setup the projection matrix
+// Called by grInit() in grprim.c.
+
     float DefaultScaleFactor = (float) 0.5f;
-    float fNear = (float) znear;  //0.1f;
+    float fNear = (float) znear;  //   0.1f;
     float fFar  = (float) zfar;   //1000.0f;
-    float fFov = (float) fov;     //90.0f;
+    float fFov = (float) fov;     //  90.0f;
 
     CurrentProjectionF.initialized = FALSE;
 
-// #ps
-// The far must be bigger than near.
-
     CurrentProjectionF.znear = (float) znear;
     CurrentProjectionF.zfar  = (float) zfar;
-    CurrentProjectionF.fov   = (float) fov;
+// #ps: Far must be bigger than near.
+
+    CurrentProjectionF.fov = (float) fov;  // 90 degrees.
 
 //
 // The Scale factor
@@ -201,20 +202,17 @@ grInitializeProjection(
     CurrentProjectionF.scale_factor = (float) scalefactor;
 
 // :::: The fov scaling factor. ::::
+// This is the scale fator recorded into the projection matrix.
 // This represents the scale factor but using radians instead of degree.
-// fov in radient.
 // Quanto menor for o angulo, maior será o objeto.
-// 1/tan(fov/2)
+// Formula:   rad = degrees * (pi/180)
+//            rad = (degree/180) * pi
 
-    float fFovRad = 
-        1.0f / tanf(fFov * 0.5f / 180.0f * 3.14159f);
-    //float fFovRad = 1.0f / tanf(fFov * 0.5f / 180.0f * 3.14159f);
-
-    // #bugbug
-    // Actually this is our scale factor for x and y,
-    // but this value is not working fine.
-    // Se we are using somethig between 0.01f and 2.0f.
-    //CurrentProjectionF.scale_factor = fFovRad;
+    // Using Radians instead of degrees.
+    //                         (     (degree/180)    *pi)
+    float fFovRad = 1.0f / tanf(fFov * 0.5f / 180.0f * 3.14159f);
+    // Save it.
+    CurrentProjectionF.fovRad = (float) fFovRad;
 
 //
 // The aspect ratio
@@ -232,18 +230,17 @@ grInitializeProjection(
     CurrentProjectionF.height = (unsigned long) (height & 0xFFFFFFFF);
     CurrentProjectionF.ar = (float) fAspectRatio;
 
-//
+// -----------------------------------------------
 // The projection matrix.
-//
-
 // This matrix was define on top of proj.c.
 // See: 
 // libs/libgr3d/include/grprim3d.h
 
-    // afx
+    // a*fx
     matProj.m[0][0] = (float) (fAspectRatio * fFovRad);
-    // fy
+    //   fy
     matProj.m[1][1] = (float) fFovRad;
+
     // #todo: Here we are normalizing the z values.
     // The purpose is using values in a range of 0~1.
     matProj.m[2][2] = (float) (fFar / (fFar - fNear));
