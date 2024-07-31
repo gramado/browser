@@ -159,6 +159,22 @@ gwsDepthRange(
     gr_depth_range(CurrentProjection,minZ,maxZ);
 }
 
+
+/*
+Convert FOV from degrees to radians:
+
+fFov * 0.5f / 180.0f * 3.14159f: This part calculates half of the FOV in radians.
+Calculate tangent of half FOV:
+
+tanf(fFov * 0.5f / 180.0f * 3.14159f): Calculates the tangent of the half FOV in radians.
+Invert the tangent value:
+
+1.0f / tanf(...): Inverts the tangent value to obtain the desired fFovRad.
+
+Half FOV: The tangent function is applied to half the FOV to calculate 
+the distance from the projection plane to the viewing point.
+*/
+
 // ======================================================
 // Using float.
 // Initializes the CurrentProjectionF structure.
@@ -175,32 +191,36 @@ grInitializeProjection(
 // Setup the projection matrix
 // Called by grInit() in grprim.c.
 
+// Default scale factor if not provided.
     float DefaultScaleFactor = (float) 0.5f;
+
+// Convert input parameters to floats for consistency.
     float fNear = (float) znear;  //   0.1f;
     float fFar  = (float) zfar;   //1000.0f;
     float fFov = (float) fov;     //  90.0f;
 
+// Initialize the projection structure.
     CurrentProjectionF.initialized = FALSE;
-
     CurrentProjectionF.znear = (float) znear;
     CurrentProjectionF.zfar  = (float) zfar;
-// #ps: Far must be bigger than near.
-
+    // #ps: Far must be bigger than near.
     CurrentProjectionF.fov = (float) fov;  // 90 degrees.
 
 //
 // The Scale factor
 //
 
+// Validate and set the scale factor.
 // #todo: 
 // We have a formula for this, the caller needs to respect it.
 // % da tela.
-    
     if ((float) scalefactor <= 0.0f){
         scalefactor = (float) DefaultScaleFactor;
     }
     CurrentProjectionF.scale_factor = (float) scalefactor;
 
+// Calculate the field of view in radians.
+// This is used for the projection matrix calculation.
 // :::: The fov scaling factor. ::::
 // This is the scale fator recorded into the projection matrix.
 // This represents the scale factor but using radians instead of degree.
@@ -218,6 +238,8 @@ grInitializeProjection(
 // The aspect ratio
 //
 
+// Calculate the aspect ratio of the viewport.
+
 // Fatal error.
 // Division by '0'.
     if (height == 0){
@@ -231,23 +253,31 @@ grInitializeProjection(
     CurrentProjectionF.ar = (float) fAspectRatio;
 
 // -----------------------------------------------
+// Construct the projection matrix.
+// The projection matrix transforms 3D points into 2D coordinates on the screen.
 // The projection matrix.
 // This matrix was define on top of proj.c.
 // See: 
 // libs/libgr3d/include/grprim3d.h
 
-    // a*fx
+// Top-left element: scales the x-coordinate based on aspect ratio and field of view.
+// a*fx
     matProj.m[0][0] = (float) (fAspectRatio * fFovRad);
-    //   fy
+
+// Top-right element: scales the y-coordinate based on field of view.
+//   fy
     matProj.m[1][1] = (float) fFovRad;
 
-    // #todo: Here we are normalizing the z values.
-    // The purpose is using values in a range of 0~1.
+// Bottom-left and bottom-right elements:
+// These elements are used to map the z-coordinate to the near and far clipping planes.
+// #todo: Here we are normalizing the z values.
+// The purpose is using values in a range of 0~1.
     matProj.m[2][2] = (float) (fFar / (fFar - fNear));
     //#bugbug: Talvez os 2 abaixo estão invertidos.
     matProj.m[2][3] = (float) 1.0f;
     matProj.m[3][2] = (float) ((-fFar * fNear) / (fFar - fNear));
-    
+
+// Bottom-right element: set to zero for perspective projection.
     matProj.m[3][3] = (float) 0.0f;
 
 // Done:
