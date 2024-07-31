@@ -410,46 +410,36 @@ static int do_event_loop(int fd)
 
 int uiInitialize(void)
 {
-
-//----------------
     struct sockaddr_in addr_in;
     addr_in.sin_family = AF_INET;
     addr_in.sin_addr.s_addr = IP(127,0,0,1);
     addr_in.sin_port = PORTS_WS;
-//----------------
 
     int client_fd = -1;
 
-    debug_print ("browser: Initializing ...\n");
-
-// Device info.
-    unsigned long w = gws_get_system_metrics(1);
-    unsigned long h = gws_get_system_metrics(2);
-    if ( w == 0 || h == 0 ){
-        printf ("browser: w h \n");
-        exit(1);
-    }
-
 // socket
-    //client_fd = socket( AF_INET, SOCK_STREAM, 0 );
     client_fd = socket( AF_INET, SOCK_RAW, 0 );
     if (client_fd<0){
-       printf ("browser: Couldn't create socket\n");
+       printf ("browser: on socket()\n");
        exit(1);
     }
 
 // connect
-// Nessa hora colocamos no accept um fd.
-// Então o servidor escreverá em nosso arquivo.
-
     while (TRUE){
         if (connect(client_fd, (void *) &addr_in, sizeof(addr_in)) < 0){ 
-            debug_print("browser: Connection Failed \n"); 
-            printf     ("browser: Connection Failed \n"); 
+            printf ("browser: on connect()\n"); 
         }else{ break; }; 
     };
 
 // ==============================================
+
+// Device info
+    unsigned long w = gws_get_system_metrics(1);
+    unsigned long h = gws_get_system_metrics(2);
+    if ( w == 0 || h == 0 ){
+        printf ("browser: w h\n");
+        exit(1);
+    }
 
 // #todo: 
 // Salvar em global.
@@ -474,7 +464,6 @@ int uiInitialize(void)
     //unsigned long viewwindowy = ( ( h - w_height) >> 1 );
     unsigned long viewwindowx = 10;
     unsigned long viewwindowy = 10;
-    
 
 // #test
 // #bugbug
@@ -493,33 +482,16 @@ int uiInitialize(void)
         viewwindowy = 0;
     }
 
-// ===================
-// main window
-// style: 
-// 0x0001=maximized | 0x0002=minimized | 0x0004=fullscreen | 0x0008 statusbar
-
-/*
-    main_window = 
-        (int) gws_create_window ( 
-                  client_fd,
-                  WT_OVERLAPPED, 
-                  WINDOW_STATUS_ACTIVE,  // status
-                  VIEW_NULL,             // view
-                  app_name,
-                  viewwindowx, viewwindowy, w_width, w_height,
-                  0,   // No parent.
-                  0x0000,  
-                  COLOR_GRAY, COLOR_GRAY );
-*/
-
 // Saving
-
     mw_left   = (unsigned long) viewwindowx;
     mw_top    = (unsigned long) viewwindowy;
     mw_width  = (unsigned long) w_width;
     mw_height = (unsigned long) w_height;
 
-// #test
+// Main window
+// style: 
+// 0x0001=maximized | 0x0002=minimized | 0x0004=fullscreen | 0x0008 statusbar
+
     main_window = 
         (int) gws_create_application_window (
                 client_fd,
@@ -534,7 +506,6 @@ int uiInitialize(void)
     if (main_window > 0){
         __main_window = main_window;
     }
-
 
 // ===================
 // address bar
@@ -591,22 +562,8 @@ int uiInitialize(void)
                   main_window, 
                   0, COLOR_GRAY, COLOR_GRAY );
 
-/*
-// #testing WT_ICON
-    button = 
-        (int) gws_create_window (
-                  client_fd,
-                  WT_ICON, 1, 1, ">",
-                  (w_width -24 -4),  // l 
-                  4,                 // t
-                  24, 
-                  24,
-                  main_window, 
-                  0, COLOR_RED, COLOR_RED );
-*/
-
     if (button<0)
-        debug_print("browser: button fail\n"); 
+        printf("browser: button fail\n"); 
     if (button>0){
         __button_window = button;
     }
@@ -630,58 +587,56 @@ int uiInitialize(void)
                   0, COLOR_RED, COLOR_RED );
 
     if (client_window < 0)
-        debug_print("browser: client_window fail\n"); 
+        printf("browser: client_window fail\n"); 
+
+
+    unsigned long TextLeft = 8;
+    unsigned long TextTop = 8;
+    unsigned int TextColor = COLOR_BLACK;
 
 // Save globally and print the text.
+// IN: fd, wid, left, top, color, label
     if (client_window > 0)
     {
         __client_window = client_window;
         gws_draw_text (
-            (int) client_fd,      // fd
-            (int) client_window,  // window id
-            (unsigned long) 8,    // left
-            (unsigned long) 8,    // top
-            (unsigned long) COLOR_BLACK,
+            (int) client_fd,
+            (int) client_window,
+            (unsigned long) TextLeft,
+            (unsigned long) TextTop,
+            (unsigned long) TextColor,
             cw_label );
     }
 
-// Refresh
+
+// Refresh main window
     gws_refresh_window( client_fd, main_window );
 
-
-// ============================================
-
-
-// ============================================
-// focus
-// Set focus on addressbar window.
-//    gws_async_command(
-//        client_fd, 9, addressbar_window, addressbar_window );
-// Set focus on client window.
-    //gws_async_command(
-    //    client_fd, 9, client_window, client_window );
-// =======================================================
-
-// set active window.
-    //gws_async_command(
-    //     client_fd,
-    //     15, 
-    //     main_window,
-    //     main_window );
-
-    gws_set_focus( client_fd, client_window );
+// Set active window
     gws_set_active( client_fd, main_window );
 
-// Call the event loop.
-    return (int) do_event_loop(client_fd);
+// Set window with focus
+    gws_set_focus( client_fd, client_window );
 
+// Call the event loop
+    int LoopReturnValue = -1;
+    LoopReturnValue = (int) do_event_loop(client_fd);
+    if (LoopReturnValue != 0){
+        goto fail;
+    }
+
+// OK
     if (isTimeToQuit)
     {
-        gws_destroy_window(client_fd,__button_window);
-        gws_destroy_window(client_fd,__main_window);
+        gws_destroy_window(client_fd, __button_window);
+        gws_destroy_window(client_fd, __client_window);
+        gws_destroy_window(client_fd, __main_window);
+        // ...
         return EXIT_SUCCESS;
     }
 
+fail:
+    printf("browser: FAIL\n");
     return EXIT_FAILURE;
 }
 
