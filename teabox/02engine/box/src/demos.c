@@ -1098,7 +1098,7 @@ void demoPolygon(void)
     int j=0;
 
 // Structure
-    p = (struct gr_polygon_d *) malloc( sizeof( struct gr_polygon_d ) );
+    p = (struct gr_polygon_d *) malloc( sizeof(struct gr_polygon_d) );
     if ((void*)p==NULL){
         return;
     }
@@ -1113,7 +1113,7 @@ void demoPolygon(void)
 
     p->list_address = (void*) vecList;
 
-    for(i=0; i<8; i++){
+    for (i=0; i<8; i++){
         vecList[i] = 0;
     };
 
@@ -1435,10 +1435,15 @@ void demoFlyingCubeSetup(void)
 
     if ((void*) dw != NULL)
     {
-       if(dw->magic == 1234){
+       if (dw->magic == 1234){
            __demo_window = dw;
        }
     }
+
+    // using the root window if the creation fails.
+    //dw            = __root_window;
+    //__demo_window = __root_window;
+
 
     //#debug
     flush_window(dw);

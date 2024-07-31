@@ -361,7 +361,9 @@ browserProcedure(
     return -1;
 }
 
-// GEt events with the display server.
+// Get events with the display server.
+// + We're pooling the events from a queue in the widnow's structure.
+// + The server is processing events, and only some events are sent to us.
 static int do_event_loop(int fd)
 {
     int UseDemo = TRUE;
@@ -374,18 +376,29 @@ static int do_event_loop(int fd)
     //lEvent.long1 = 0;
     //lEvent.long2 = 0;
 
-    if (fd<0)
-        return -1;
+// Parameter:
+    if (fd<0){
+        goto fail;
+    }
 
-    if (__main_window<0)
-        return -1;
+    if (__main_window < 0){
+        goto fail;
+    }
 
 // loop
 // Call the local window procedure 
 // if a valid event was found.
 
+    // Setup demo
+    //demoFlyingCubeSetup();
+
     while (1)
     {
+        // Draw demo
+        //demoFlyingCubeDrawScene(TRUE,COLOR_BLACK);
+        //demoCurve();
+        demoLines();
+
         //if (isTimeToQuit == TRUE)
             //break;
 
@@ -396,7 +409,6 @@ static int do_event_loop(int fd)
 
         if ((void *) e != NULL)
         {
-            //if( e->used == TRUE && e->magic == 1234 )
             if (e->magic == 1234){
                 browserProcedure( 
                     fd, e->window, e->type, e->long1, e->long2 );
@@ -404,8 +416,10 @@ static int do_event_loop(int fd)
         }
     };
 
-// Exit application withou error.
+// Exit application without error.
     return 0;
+fail:
+    return (int) -1;
 }
 
 int uiInitialize(void)
@@ -450,20 +464,23 @@ int uiInitialize(void)
     int client_window=0;
     int button=0;
 
-// A janela é a metade da tela.
-    unsigned long w_width  = (w/2);
-    // #hack
-    if (w == 800)
-        w_width = 640;
-    // #hack
-    if (w == 640)
-        w_width = 480;
-    unsigned long w_height = (h/2);
+// Width
+    //unsigned long w_width = (w/2);
+    unsigned long w_width = (w-40);
+    if (w > 800){ w_width = 640; }
 
+// Height
+    //unsigned long w_height = (h/2);
+    unsigned long w_height = (h-40);
+    if (h > 640){ w_height = 480; }
+
+// Left
     //unsigned long viewwindowx = ( ( w - w_width ) >> 1 );
+    unsigned long viewwindowx = 8;
+
+// Top
     //unsigned long viewwindowy = ( ( h - w_height) >> 1 );
-    unsigned long viewwindowx = 10;
-    unsigned long viewwindowy = 10;
+    unsigned long viewwindowy = 8;
 
 // #test
 // #bugbug
@@ -618,6 +635,48 @@ int uiInitialize(void)
 // Set window with focus
     gws_set_focus( client_fd, client_window );
 
+
+// -----------------------------------------
+// #test
+// Initializing the 3D engine.
+// see: 
+// main function in demo01main.c in box/src/.
+
+
+    // Window Info for main window.
+    struct gws_window_info_d LmwWindowInfo;
+    int status=0;
+
+// Get info about the main window.
+// IN: fd, wid, window info structure.
+    gws_get_window_info(
+        client_fd, 
+        __main_window,   // The app window.
+        (struct gws_window_info_d *) &LmwWindowInfo );
+ 
+        // Initialize
+        // client rect: Absolutes
+        //printf ("top: %d\n",LmwWindowInfo.cr_top);
+        // OK for root window
+        status = 
+            (int) demo01main(
+                mw_left + LmwWindowInfo.cr_left, 
+                mw_top  + LmwWindowInfo.cr_top, 
+                LmwWindowInfo.cr_width, 
+                LmwWindowInfo.cr_height );  
+
+        if (status != 0){
+            printf ("ui.c: demo01 initialization failed\n");
+            exit(1);
+        }
+
+    // #test: Update hotspot
+    grprim_update_hotspot(
+        mw_left + LmwWindowInfo.cr_left + (LmwWindowInfo.cr_width >> 1),
+        mw_top  + LmwWindowInfo.cr_top  + (LmwWindowInfo.cr_height >> 1)
+    );
+
+// ------------------------------------------------
 // Call the event loop
     int LoopReturnValue = -1;
     LoopReturnValue = (int) do_event_loop(client_fd);
