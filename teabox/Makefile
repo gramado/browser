@@ -16,8 +16,7 @@ EXTRAVERSION =
 linkFlags = -m elf_x86_64 \
 -s -x -static -T ../link.ld
 
-linkTarget = TEABOX.BIN  
-
+linkTarget = GAME00.BIN  
 
 # usermode cross compiler flags.
 CFLAGS = -Wall
