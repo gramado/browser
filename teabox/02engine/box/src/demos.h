@@ -26,7 +26,8 @@ void demoCat(int draw_desktop);
 // flying cube
 void FlyingCubeMove(int number, int direction, float value);
 void demoFlyingCubeSetup(void);
-void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color);
+void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color, int flush);
+void demos_refresh_demo_window(void);
 
 #endif    
 

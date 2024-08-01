@@ -1641,7 +1641,7 @@ void demoFlyingCubeSetup(void)
 // given all the dots of this model.
 // We need to create a function that will draw 3D cubes.
 
-void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color)
+void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color, int flush)
 {
 // The function on_execute() in main.c initilizes this demos
 // and spins into a loop calling this function to draw
@@ -1725,11 +1725,12 @@ void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color)
     //    game_update_taskbar = FALSE;
     //}
 
-    unsigned long endTick = rtl_jiffies();
-    accumulatedDeltaTick += endTick - beginTick;
+    //unsigned long endTick = rtl_jiffies();
+    //accumulatedDeltaTick += endTick - beginTick;
 // New frame.
     frames++;
 
+    /*
 // Ja se passou 1 segundo?
     if (accumulatedDeltaTick > 1000)
     {
@@ -1740,11 +1741,23 @@ void demoFlyingCubeDrawScene(int draw_desktop, unsigned int bg_color)
         accumulatedDeltaTick=0;
         frames=0;
     }
+    */
 
 // Draw yellow bar.
-    yellowstatus0(buf_fps,FALSE);
+    //yellowstatus0(buf_fps,FALSE);
 
 // Flush the backbuffer into the framebuffer.
+    if (flush){
+        gramado_flush_surface(__demo_window);
+    }
+}
+
+void demos_refresh_demo_window(void)
+{
+    if ((void*) __demo_window == NULL)
+        return;
+    if (__demo_window->magic != 1234)
+        return;
     gramado_flush_surface(__demo_window);
 }
 

@@ -3691,8 +3691,8 @@ static int on_execute(void)
         // see: demos.c
         // IN: Draw desktop, color.
         if (ShowDemo){
-            //demoFlyingCubeDrawScene(TRUE,COLOR_BLACK);
-            demoFlyingCubeDrawScene(FALSE,COLOR_BLACK);
+            //demoFlyingCubeDrawScene(TRUE,COLOR_BLACK,TRUE);
+            demoFlyingCubeDrawScene(FALSE,COLOR_BLACK,TRUE);
         }
     };
 
@@ -3770,7 +3770,7 @@ static void flyingCubeDemoLoop(void)
         //wmInputReader();
         
         // IN: draw desktop, bg color
-        demoFlyingCubeDrawScene(TRUE,COLOR_BLACK);       
+        demoFlyingCubeDrawScene(TRUE,COLOR_BLACK,TRUE);       
     };
 }
 

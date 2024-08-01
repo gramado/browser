@@ -32,6 +32,7 @@
 // see: gramado.h
 // IN: The viewport.
 //     The viewport is the client area of the applications frame window.
+/*
 extern int demo01main(
     unsigned long viewport_left,
     unsigned long viewport_top,
@@ -39,6 +40,13 @@ extern int demo01main(
     unsigned long viewport_height );
 
 extern int demo01_tests(int index);
+*/
+
+static unsigned long gameloop_last=0;
+static unsigned long gameloop_current=0;
+static unsigned long gameloop_delta=0;
+static unsigned long gameloop_frames=0;
+static char gameloop_string_buffer[64];
 
 // ------------------------------
 
@@ -390,14 +398,13 @@ static int do_event_loop(int fd)
 // if a valid event was found.
 
     // Setup demo
-    //demoFlyingCubeSetup();
+    demoFlyingCubeSetup();
+
+    gameloop_last = rtl_jiffies();
+    gameloop_frames=0;
 
     while (1)
     {
-        // Draw demo
-        //demoFlyingCubeDrawScene(TRUE,COLOR_BLACK);
-        //demoCurve();
-        demoLines();
 
         //if (isTimeToQuit == TRUE)
             //break;
@@ -414,6 +421,30 @@ static int do_event_loop(int fd)
                     fd, e->window, e->type, e->long1, e->long2 );
             }
         }
+
+        gameloop_current = rtl_jiffies();
+
+        gameloop_delta = (gameloop_current - gameloop_last);
+        //if (gameloop_delta > 16)  // 60fps
+        if (gameloop_delta > 33)  // 30fps
+        {
+            gameloop_delta = 0;
+
+            // Draw demo
+            demoFlyingCubeDrawScene(TRUE,COLOR_BLACK,FALSE);
+            //demoCurve();
+            //demoLines();
+            gameloop_frames++;           
+            
+
+            memset(gameloop_string_buffer,0,64);
+            itoa(gameloop_frames,gameloop_string_buffer);
+            strcat(gameloop_string_buffer," frames");
+            yellowstatus0(gameloop_string_buffer,TRUE);
+
+            demos_refresh_demo_window();
+        }
+        gameloop_last = gameloop_current;
     };
 
 // Exit application without error.
